@@ -2,6 +2,9 @@
 #include "proj1.h"
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#include <string.h>
 
 int main()
 {
@@ -24,7 +27,7 @@ int handle_command()
     switch (command)
     {
     case 'a':
-        /*handle_add_airport_command(); */
+        /* handle_add_airport_command(); */
         return 1;
     case 'l':
         /* handle_list_airports_command(); */
