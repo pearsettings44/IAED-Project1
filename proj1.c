@@ -8,7 +8,8 @@
 
 int main()
 {
-    airport airports[AIRPORT_MAX] = {0};
+    airport airports[AIRPORT_MAX];
+    setup_airports(airports);
     /* execute program until the user sends the 'q' command */
     while (handle_command(airports))
     {
@@ -62,11 +63,9 @@ int handle_command(airport airports[])
 void handle_add_airport_command(airport airports[])
 {
     char identity[ID_LENGTH], country[COUNTRY_LENGTH], city[CITY_LENGTH];
-    airport airport;
     scanf("%s %s %s", identity, country, city);
-    strcpy(airport.identity, identity);
-    strcpy(airport.country, country);
-    strcpy(airport.city, city);
-    airports[0] = airport;
-    printf("airport %s\n", airport.identity);
+    add_airport(airports, identity, country, city);
+    printf("airport %s\n", identity);
+    printf("%s\n", airports[0].identity);
+    printf("%s\n", airports[1].identity);
 }
