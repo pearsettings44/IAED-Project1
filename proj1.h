@@ -9,8 +9,8 @@
 #define UNDEFINED_AIRPORT ""
 
 #define INVALID_AIPORT_ID -1
-#define TOO_MANY_AIPORTS -2
-#define DUPLICATE_AIRPORT -3
+#define TOO_MANY_AIPORTS_ID -2
+#define DUPLICATE_AIRPORT_ID -3
 
 #define ERROR_INVALID_AIPORT_ID "invalid airport ID"
 #define ERROR_TOO_MANY_AIPORTS "too many airports"
