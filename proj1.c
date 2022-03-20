@@ -8,8 +8,9 @@
 
 int main()
 {
+    airport airports[AIRPORT_MAX] = {0};
     /* execute program until the user sends the 'q' command */
-    while (handle_command())
+    while (handle_command(airports))
     {
     }
 
@@ -21,13 +22,13 @@ int main()
  * Returns 1 if the program should continue after running the command.
  * Otherwise, returns 0.
  */
-int handle_command()
+int handle_command(airport airports[])
 {
     char command = getchar();
     switch (command)
     {
     case 'a':
-        /* handle_add_airport_command(); */
+        handle_add_airport_command(airports);
         return 1;
     case 'l':
         /* handle_list_airports_command(); */
@@ -51,4 +52,21 @@ int handle_command()
         /* ignore undefined commands */
         return 1;
     }
+}
+
+/**
+ * Handles the 'a' command.
+ * Adds to the system a new airport with the specified identity, country and
+ * city.
+ */
+void handle_add_airport_command(airport airports[])
+{
+    char identity[ID_LENGTH], country[COUNTRY_LENGTH], city[CITY_LENGTH];
+    airport airport;
+    scanf("%s %s %s", identity, country, city);
+    strcpy(airport.identity, identity);
+    strcpy(airport.country, country);
+    strcpy(airport.city, city);
+    airports[0] = airport;
+    printf("airport %s\n", airport.identity);
 }

@@ -1,9 +1,9 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#define ID_LENGTH 3
-#define COUNTRY_LENGTH 30
-#define CITY_LENGTH 50
+#define ID_LENGTH 4
+#define COUNTRY_LENGTH 31
+#define CITY_LENGTH 51
 #define AIRPORT_MAX 40
 
 typedef struct
@@ -13,8 +13,11 @@ typedef struct
     char city[CITY_LENGTH];
 } airport;
 
-
 /* proj.c */
 int handle_command();
+void handle_add_airport_command(airport airports[]);
+
+/* airport.c */
+
 
 #endif
