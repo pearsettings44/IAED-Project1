@@ -16,9 +16,11 @@
 #define ERROR_TOO_MANY_AIPORTS "too many airports"
 #define ERROR_DUPLICATE_AIRPORT "duplicate airport"
 
+#define ERROR_NO_SUCH_AIRPORT_ID "%s: no such airport ID\n"
+
 typedef struct
 {
-    char identity[ID_LENGTH];
+    char id[ID_LENGTH];
     char country[COUNTRY_LENGTH];
     char city[CITY_LENGTH];
 } airport;
@@ -26,9 +28,10 @@ typedef struct
 /* proj.c */
 int handle_command();
 void handle_add_airport_command(airport airports[]);
+void handle_list_airports_command(airport airports[]);
 
 /* airport.c */
 void setup_airports(airport airports[]);
-int add_airport(airport airports[], char identity[], char country[], char city[]);
+int add_airport(airport airports[], char id[], char country[], char city[]);
 
 #endif
