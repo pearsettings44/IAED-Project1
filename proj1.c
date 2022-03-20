@@ -59,13 +59,15 @@ int handle_command(airport airports[])
  * Handles the 'a' command.
  * Adds to the system a new airport with the specified identity, country and
  * city.
+ * input format: a <IDAirport> <country> <city>
+ * output format: airport <IDAirport>
  */
 void handle_add_airport_command(airport airports[])
 {
     int value;
     char identity[ID_LENGTH], country[COUNTRY_LENGTH], city[CITY_LENGTH];
     scanf("%s %s %s", identity, country, city);
-    
+
     /* Add aiport to the airport system */
     value = add_airport(airports, identity, country, city);
 
