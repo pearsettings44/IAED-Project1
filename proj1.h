@@ -8,6 +8,14 @@
 
 #define UNDEFINED_AIRPORT ""
 
+#define INVALID_AIPORT_ID -1
+#define TOO_MANY_AIPORTS -2
+#define DUPLICATE_AIRPORT -3
+
+#define ERROR_INVALID_AIPORT_ID "invalid airport ID"
+#define ERROR_TOO_MANY_AIPORTS "too many airports"
+#define ERROR_DUPLICATE_AIRPORT "duplicate airport"
+
 typedef struct
 {
     char identity[ID_LENGTH];
@@ -21,6 +29,6 @@ void handle_add_airport_command(airport airports[]);
 
 /* airport.c */
 void setup_airports(airport airports[]);
-void add_airport(airport airports[], char identity[], char country[], char city[]);
+int add_airport(airport airports[], char identity[], char country[], char city[]);
 
 #endif

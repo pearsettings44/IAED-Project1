@@ -62,10 +62,16 @@ int handle_command(airport airports[])
  */
 void handle_add_airport_command(airport airports[])
 {
+    int value;
     char identity[ID_LENGTH], country[COUNTRY_LENGTH], city[CITY_LENGTH];
     scanf("%s %s %s", identity, country, city);
-    add_airport(airports, identity, country, city);
-    printf("airport %s\n", identity);
-    printf("%s\n", airports[0].identity);
-    printf("%s\n", airports[1].identity);
+    value = add_airport(airports, identity, country, city);
+    if (value == INVALID_AIPORT_ID)
+        printf(ERROR_INVALID_AIPORT_ID);
+    else if (value == TOO_MANY_AIPORTS)
+        printf(ERROR_TOO_MANY_AIPORTS);
+    else if (value == DUPLICATE_AIRPORT)
+        printf(ERROR_DUPLICATE_AIRPORT);
+    else
+        printf("airport %s\n", identity);
 }
