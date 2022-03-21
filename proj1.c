@@ -9,9 +9,11 @@
 int main()
 {
     airport airports[AIRPORT_MAX];
+    flight flights[FLIGHT_MAX];
     setup_airports(airports);
+    setup_flights(flights);
     /* execute program until the user sends the 'q' command */
-    while (handle_command(airports))
+    while (handle_command(airports, flights))
     {
     }
 
@@ -23,7 +25,7 @@ int main()
  * Returns 1 if the program should continue after running the command.
  * Otherwise, returns 0.
  */
-int handle_command(airport airports[])
+int handle_command(airport airports[], flight flights[])
 {
     char command = getchar();
     switch (command)
@@ -35,7 +37,7 @@ int handle_command(airport airports[])
         handle_list_airports_command(airports);
         return 1;
     case 'v':
-        /* handle_add_flight_command(airports); */
+        handle_add_flight_command(flights);
         return 1;
     case 'p':
         /* handle_list_flight_departure_command(); */
@@ -66,7 +68,8 @@ void handle_add_airport_command(airport airports[])
 {
     int value;
     char c;
-    char id[ID_LENGTH], country[COUNTRY_LENGTH], city[CITY_LENGTH] = {0}, cityaux[CITY_LENGTH];
+    char id[ID_LENGTH], country[COUNTRY_LENGTH], city[CITY_LENGTH] = {0},
+                                                 cityaux[CITY_LENGTH];
     scanf("%s %s", id, country);
     while ((c = getchar()) != '\n')
     {
@@ -89,14 +92,14 @@ void handle_add_airport_command(airport airports[])
     else if (value == DUPLICATE_AIRPORT_ID)
         printf(ERROR_DUPLICATE_AIRPORT);
     else
-        printf("airport %s\n", id);
+        printf(ADD_AIRPORT_SUCCESSFULLY, id);
 }
 
 /**
  * Handles the 'l' command.
  * Lists the airports.
  * input format: l [<IDAairport> <IDAirport> ...]
- * outout format: <IDAirport> <city> <country> #flights
+ * output format: <IDAirport> <city> <country> #flights
  * If no arguments are passed, list all airport in ID's alphabetically order.
  * If multiplate arguments are passed, list airport in order of input.
  */
@@ -120,7 +123,7 @@ void handle_list_airports_command(airport airports[])
             empty++;
         }
     }
-    /* If no IDs were provided, prints all airports. */
+    /* If it's just the 'l' command without arguments */
     if (!empty)
     {
         sort_airports(airports);
@@ -128,4 +131,41 @@ void handle_list_airports_command(airport airports[])
     }
 }
 
-/* void handle_add_flight_command(airports) */
+/**
+ * Handles the 'v' command.
+ * Adds a flight to the system or lists all flights.
+ * input format: v [<code> <airport_departure> <airport_arrival>
+ * <date_departure> <time_departure> <duration> <capacity>]
+ * output format: <code> <airport_departure> <airport_arrival>
+ * <date_departure> <time_departure>
+ * If no arguments are passed, list all flights.
+ */
+void handle_add_flight_command(flight flights[])
+{
+    char c;
+    char code[FLIGHT_CODE], airport_departure[ID_LENGTH],
+        airport_arrival[ID_LENGTH], date_departure[DATE_LENGTH],
+        time_departure[TIME_LENGTH], duration[TIME_LENGTH];
+    int capacity, value, empty = 0;
+
+    while ((c = getchar()) != '\n')
+    {
+        scanf("%s %s %s %s %s %s %d", code, airport_departure, airport_arrival,
+              date_departure, time_departure, duration, &capacity);
+        empty++;
+    }
+    /* Add flight to the airport system */
+    value = add_flights(flights, code, airport_departure, airport_arrival,
+                        date_departure, time_departure, duration, capacity);
+
+    if (value == INVALID_FLIGHT_CODE_ID)
+        printf(ERROR_INVALID_FLIGHT_CODE);
+    if (value == TOO_MANY_AIPORTS_ID)
+        printf(ERROR_TOO_MANY_FLIGTS);
+
+    /* If it's just the 'v' command without arguments */
+    if (!empty)
+    {
+        return;
+    }
+}
