@@ -71,6 +71,7 @@ void handle_add_airport_command(airport airports[])
     while ((c = getchar()) != '\n')
     {
         scanf("%s", cityaux);
+        /* If the city has more then one word */
         if (c == ' ')
         {
             strcat(cityaux, " ");
@@ -120,7 +121,5 @@ void handle_list_airports_command(airport airports[])
     }
     /* If no IDs were provided, prints all airports. */
     if (!empty)
-    {
         list_all_airports(airports);
-    }
 }
