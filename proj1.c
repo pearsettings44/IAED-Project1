@@ -65,8 +65,18 @@ int handle_command(airport airports[])
 void handle_add_airport_command(airport airports[])
 {
     int value;
-    char id[ID_LENGTH], country[COUNTRY_LENGTH], city[CITY_LENGTH];
-    scanf("%s %s %s", id, country, city);
+    char c;
+    char id[ID_LENGTH], country[COUNTRY_LENGTH], city[CITY_LENGTH] = {0}, cityaux[CITY_LENGTH];
+    scanf("%s %s", id, country);
+    while ((c = getchar()) != '\n')
+    {
+        scanf("%s", cityaux);
+        if (c == ' ')
+        {
+            strcat(cityaux, " ");
+        }
+        strcat(city, cityaux);
+    }
 
     /* Add aiport to the airport system */
     value = add_airport(airports, id, country, city);
