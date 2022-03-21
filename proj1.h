@@ -31,6 +31,7 @@ typedef struct
 int handle_command();
 void handle_add_airport_command(airport airports[]);
 void handle_list_airports_command(airport airports[]);
+/* void handle_add_flight_command(airport airports[]); */
 
 /* airport.c */
 void setup_airports(airport airports[]);

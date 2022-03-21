@@ -35,7 +35,7 @@ int handle_command(airport airports[])
         handle_list_airports_command(airports);
         return 1;
     case 'v':
-        /* handle_add_flight_command(); */
+        /* handle_add_flight_command(airports); */
         return 1;
     case 'p':
         /* handle_list_flight_departure_command(); */
@@ -94,10 +94,11 @@ void handle_add_airport_command(airport airports[])
 
 /**
  * Handles the 'l' command.
- * Adds to the system a new airport with the specified id, country and
- * city.
- * input format: a <IDAirport> <country> <city> 
- * output format: airport <IDAirport>
+ * Lists the airports.
+ * input format: l [<IDAairport> <IDAirport> ...]
+ * outout format: <IDAirport> <city> <country> #flights
+ * If no arguments are passed, list all airport in ID's alphabetically order.
+ * If multiplate arguments are passed, list airport in order of input.
  */
 void handle_list_airports_command(airport airports[])
 {
@@ -115,7 +116,7 @@ void handle_list_airports_command(airport airports[])
         else
         {
             printf("%s %s %s\n", airports[counter].id,
-                   airports[counter].country, airports[counter].city);
+                   airports[counter].city, airports[counter].country);
             empty++;
         }
     }
@@ -126,3 +127,5 @@ void handle_list_airports_command(airport airports[])
         list_all_airports(airports);
     }
 }
+
+/* void handle_add_flight_command(airports) */
