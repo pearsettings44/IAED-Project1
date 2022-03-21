@@ -162,6 +162,10 @@ void handle_add_flight_command(flight flights[])
         printf(ERROR_INVALID_FLIGHT_CODE);
     if (value == TOO_MANY_AIPORTS_ID)
         printf(ERROR_TOO_MANY_FLIGTS);
+    if(value == INVALID_DURATION_ID)
+        printf(ERROR_INVALID_DURATION);
+    if(value == INVALID_CAPACITY_ID)
+        printf(ERROR_INVALID_CAPACITY);
 
     /* If it's just the 'v' command without arguments */
     if (!empty)

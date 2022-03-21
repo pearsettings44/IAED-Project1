@@ -13,9 +13,9 @@
 #define TOO_MANY_AIPORTS_ID -2
 #define DUPLICATE_AIRPORT_ID -3
 
-#define ERROR_INVALID_AIPORT_ID "invalid airport ID"
-#define ERROR_TOO_MANY_AIPORTS "too many airports"
-#define ERROR_DUPLICATE_AIRPORT "duplicate airport"
+#define ERROR_INVALID_AIPORT_ID "invalid airport ID\n"
+#define ERROR_TOO_MANY_AIPORTS "too many airports\n"
+#define ERROR_DUPLICATE_AIRPORT "duplicate airport\n"
 #define ADD_AIRPORT_SUCCESSFULLY "airport %s\n"
 
 #define ERROR_NO_SUCH_AIRPORT_ID "%s: no such airport ID\n"
@@ -26,16 +26,18 @@
 #define DATE_LENGTH 11
 #define TIME_LENGTH 6
 
-#define ERROR_INVALID_FLIGHT_CODE "invalid flight code"
-#define ERROR_FLIGHT_ALREADY_EXISTS "flight already exists"
-#define ERROR_TOO_MANY_FLIGTS "too many flights"
-#define ERROR_INVALID_DATE "invalid date"
-#define ERROR_INVALID_DURATION "invalid duration"
-#define ERROR_INVALID_CAPACITY "invalid capacity"
-#define ADD_FLIGHT_SCCESSFULLY "%s %s %s %s\n"
-
 #define INVALID_FLIGHT_CODE_ID -1
 #define TOO_MANY_FLIGHTS_ID -2
+#define INVALID_DURATION_ID -3
+#define INVALID_CAPACITY_ID -4
+
+#define ERROR_INVALID_FLIGHT_CODE "invalid flight code\n"
+#define ERROR_FLIGHT_ALREADY_EXISTS "flight already exists\n"
+#define ERROR_TOO_MANY_FLIGTS "too many flights\n"
+#define ERROR_INVALID_DATE "invalid date\n"
+#define ERROR_INVALID_DURATION "invalid duration\n"
+#define ERROR_INVALID_CAPACITY "invalid capacity\n"
+
 
 /* structs */
 typedef struct

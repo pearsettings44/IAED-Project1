@@ -29,15 +29,31 @@ int add_flights(flight flights[], char code[], char airport_departure[],
 {
     int counter;
     int code_length = strlen(code) - 1;
-    
+
     /* Check if the code is valid. */
     if (!isupper(code[0]) || !isupper(code[1]))
         return INVALID_FLIGHT_CODE_ID;
     for (counter = 2; counter <= code_length; counter++)
     {
         if (!isdigit(code[counter]))
-        return INVALID_FLIGHT_CODE_ID;
+            return INVALID_FLIGHT_CODE_ID;
     }
+
+    /* Check if there's already a flight with the same code on the same day. */
+
+    /* Check if both airports exist */
+
+    /* Check if the date is valid  */
+
+    /* Check if duration is valid */
+    if ((duration[0] >= '1' && duration[1] > '2') ||
+        (duration[0] == '1' && duration[1] == '2' &&
+         (duration[3] != '0' || duration[4] != '0')))
+        return INVALID_DURATION_ID;
+
+    /* Check if capacity is valid */
+    if (capacity < 10 || capacity > 100)
+        return INVALID_CAPACITY_ID;
 
     for (counter = 0; counter < FLIGHT_MAX; counter++)
     {
