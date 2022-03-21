@@ -81,6 +81,13 @@ void handle_add_airport_command(airport airports[])
         printf("airport %s\n", id);
 }
 
+/**
+ * Handles the 'l' command.
+ * Adds to the system a new airport with the specified id, country and
+ * city.
+ * input format: a <IDAirport> <country> <city>
+ * output format: airport <IDAirport>
+ */
 void handle_list_airports_command(airport airports[])
 {
     int counter, empty = 0;
@@ -96,14 +103,14 @@ void handle_list_airports_command(airport airports[])
             printf(ERROR_NO_SUCH_AIRPORT_ID, id);
         else
         {
-            printf("%s %s %s\n", airports[counter].id, airports[counter].country, airports[counter].city);
+            printf("%s %s %s\n", airports[counter].id,
+                   airports[counter].country, airports[counter].city);
             empty++;
         }
     }
     /* If no IDs were provided, prints all airports. */
     if (!empty)
     {
-        for (counter = 0; counter < AIRPORT_MAX && strcmp(airports[counter].id, UNDEFINED_AIRPORT); counter++)
-            printf("%s %s %s\n", airports[counter].id, airports[counter].country, airports[counter].city);
+        list_all_airports(airports);
     }
 }

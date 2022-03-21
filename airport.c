@@ -59,3 +59,12 @@ int add_airport(airport airports[], char id[], char country[], char city[])
     return TOO_MANY_AIPORTS_ID;
 }
 
+void list_all_airports(airport airports[])
+{
+    int counter;
+    for (counter = 0; counter < AIRPORT_MAX &&
+                          strcmp(airports[counter].id, UNDEFINED_AIRPORT);
+             counter++)
+            printf("%s %s %s\n", airports[counter].id,
+                   airports[counter].country, airports[counter].city);
+}

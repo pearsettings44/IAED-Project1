@@ -33,5 +33,6 @@ void handle_list_airports_command(airport airports[]);
 /* airport.c */
 void setup_airports(airport airports[]);
 int add_airport(airport airports[], char id[], char country[], char city[]);
+void list_all_airports(airport airports[]);
 
 #endif
