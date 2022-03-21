@@ -1,12 +1,13 @@
 #ifndef MAIN_H
 #define MAIN_H
 
+/* constants */
 #define ID_LENGTH 4
 #define COUNTRY_LENGTH 31
 #define CITY_LENGTH 51
 #define AIRPORT_MAX 40
 
-#define UNDEFINED_AIRPORT ""
+#define UNDEFINED_AIRPORT "zzz"
 
 #define INVALID_AIPORT_ID -1
 #define TOO_MANY_AIPORTS_ID -2
@@ -18,6 +19,7 @@
 
 #define ERROR_NO_SUCH_AIRPORT_ID "%s: no such airport ID\n"
 
+/* structs */
 typedef struct
 {
     char id[ID_LENGTH];
@@ -33,6 +35,7 @@ void handle_list_airports_command(airport airports[]);
 /* airport.c */
 void setup_airports(airport airports[]);
 int add_airport(airport airports[], char id[], char country[], char city[]);
+void sort_airports(airport airports[]);
 void list_all_airports(airport airports[]);
 
 #endif

@@ -59,12 +59,40 @@ int add_airport(airport airports[], char id[], char country[], char city[])
     return TOO_MANY_AIPORTS_ID;
 }
 
+/**
+ * Sorts the aiports by their ID, in alphabetical order.
+ */
+void sort_airports(airport airports[])
+{
+    int counter, counterAux;
+    airport temp_airport;
+
+    /* Loop through airports */
+    for (counterAux = 0; counterAux < AIRPORT_MAX - 1; counterAux++)
+    {
+        /* Loop through airports ID */
+        for (counter = 0; counter < AIRPORT_MAX - 1; counter++)
+        {
+            /* Sort airports by alphabetical order of the ID */
+            if (strcmp(airports[counter].id, airports[counter + 1].id) > 0)
+            {
+                temp_airport = airports[counter];
+                airports[counter] = airports[counter + 1];
+                airports[counter + 1] = temp_airport;
+            }
+        }
+    }
+}
+
+/**
+ * Lists all aiports in the system.
+ */
 void list_all_airports(airport airports[])
 {
     int counter;
     for (counter = 0; counter < AIRPORT_MAX &&
-                          strcmp(airports[counter].id, UNDEFINED_AIRPORT);
-             counter++)
-            printf("%s %s %s\n", airports[counter].id,
-                   airports[counter].country, airports[counter].city);
+                      strcmp(airports[counter].id, UNDEFINED_AIRPORT);
+         counter++)
+        printf("%s %s %s\n", airports[counter].id,
+               airports[counter].country, airports[counter].city);
 }

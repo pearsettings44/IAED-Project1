@@ -96,7 +96,7 @@ void handle_add_airport_command(airport airports[])
  * Handles the 'l' command.
  * Adds to the system a new airport with the specified id, country and
  * city.
- * input format: a <IDAirport> <country> <city>
+ * input format: a <IDAirport> <country> <city> 
  * output format: airport <IDAirport>
  */
 void handle_list_airports_command(airport airports[])
@@ -121,5 +121,8 @@ void handle_list_airports_command(airport airports[])
     }
     /* If no IDs were provided, prints all airports. */
     if (!empty)
+    {
+        sort_airports(airports);
         list_all_airports(airports);
+    }
 }
