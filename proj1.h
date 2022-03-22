@@ -38,6 +38,8 @@
 #define ERROR_INVALID_DURATION "invalid duration\n"
 #define ERROR_INVALID_CAPACITY "invalid capacity\n"
 
+#define STARTING_DATE "01-01-2002"
+
 
 /* structs */
 typedef struct
@@ -57,6 +59,21 @@ typedef struct
     char duration[TIME_LENGTH];
     int capacity;
 } flight;
+
+/* typedef struct 
+{
+    int day;
+    int month;
+    int year;
+} date;
+
+typedef struct 
+{
+    int hours;
+    int minutes;
+} time;
+ */
+
 
 /* proj.c */
 int handle_command(airport airports[], flight flights[]);

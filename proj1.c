@@ -6,6 +6,9 @@
 #include <ctype.h>
 #include <string.h>
 
+/* global variable: system date */
+char date[DATE_LENGTH] = STARTING_DATE;  
+
 int main()
 {
     airport airports[AIRPORT_MAX];
