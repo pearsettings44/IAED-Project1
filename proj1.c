@@ -170,18 +170,21 @@ void handle_add_flight_command(airport airports[], flight flights[])
 
     if (value == INVALID_FLIGHT_CODE_ID)
         printf(ERROR_INVALID_FLIGHT_CODE);
-    if (value == TOO_MANY_AIPORTS_ID)
+    else if (value == TOO_MANY_AIPORTS_ID)
         printf(ERROR_TOO_MANY_FLIGTS);
-    if (value == INVALID_DURATION_ID)
+    else if (value == INVALID_DURATION_ID)
         printf(ERROR_INVALID_DURATION);
-    if (value == INVALID_CAPACITY_ID)
+    else if (value == INVALID_CAPACITY_ID)
         printf(ERROR_INVALID_CAPACITY);
-    if (value == INVALID_DATE_ID)
+    else if (value == INVALID_DATE_ID)
         printf(ERROR_INVALID_DATE);
-    if (value == NO_SUCH_AIRPORT_DEPARTURE_ID)
+    else if (value == NO_SUCH_AIRPORT_DEPARTURE_ID)
         printf(ERROR_NO_SUCH_AIRPORT_ID, airport_departure);
-    if (value == NO_SUCH_AIRPORT_ARRIVAL_ID)
+    else if (value == NO_SUCH_AIRPORT_ARRIVAL_ID)
         printf(ERROR_NO_SUCH_AIRPORT_ID, airport_arrival);
-    if (value == FLIGHT_ALREADY_EXISTS_ID)
+    else if (value == FLIGHT_ALREADY_EXISTS_ID)
         printf(ERROR_FLIGHT_ALREADY_EXISTS);
+    else
+    {  
+    }
 }

@@ -58,6 +58,7 @@ typedef struct
     char id[ID_LENGTH];
     char country[COUNTRY_LENGTH];
     char city[CITY_LENGTH];
+    int flights_quantity;
 } airport;
 
 typedef struct

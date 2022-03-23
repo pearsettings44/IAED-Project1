@@ -94,5 +94,5 @@ void list_all_airports(airport airports[])
                       strcmp(airports[counter].id, UNDEFINED_AIRPORT);
          counter++)
         printf("%s %s %s\n", airports[counter].id,
-               airports[counter].country, airports[counter].city);
+               airports[counter].city, airports[counter].country);
 }
