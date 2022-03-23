@@ -31,6 +31,9 @@
 #define INVALID_DURATION_ID -3
 #define INVALID_CAPACITY_ID -4
 #define INVALID_DATE_ID -5
+#define NO_SUCH_AIRPORT_DEPARTURE_ID -6
+#define NO_SUCH_AIRPORT_ARRIVAL_ID -7
+#define FLIGHT_ALREADY_EXISTS_ID -8
 
 #define ERROR_INVALID_FLIGHT_CODE "invalid flight code\n"
 #define ERROR_FLIGHT_ALREADY_EXISTS "flight already exists\n"
@@ -72,7 +75,7 @@ typedef struct
 int handle_command(airport airports[], flight flights[]);
 void handle_add_airport_command(airport airports[]);
 void handle_list_airports_command(airport airports[]);
-void handle_add_flight_command(flight flights[]);
+void handle_add_flight_command(airport airports[], flight flights[]);
 
 /* airport.c */
 void setup_airports(airport airports[]);
@@ -82,8 +85,12 @@ void list_all_airports(airport airports[]);
 
 /* flights.c */
 void setup_flights(flight flights[]);
-int add_flights(flight flights[], char code[], char airport_departure[],
+int get_date_year(char char_date[]);
+int get_date_month(char char_date[]);
+int add_flights(airport airports[], flight flights[], char code[],
+                char airport_departure[],
                 char airport_arrival[], char date_departure[],
                 char time_departure[], char duration[], int capacity);
+void list_all_flights(flight flights[]);
 
 #endif

@@ -68,7 +68,8 @@ int get_date_day(char char_date[])
  * Returns the ID that represents a new flight.
  * If the flight code is invalid, returns INVALID_FLIGHT_CODE_ID.
  */
-int add_flights(flight flights[], char code[], char airport_departure[],
+int add_flights(airport airports[], flight flights[], char code[],
+                char airport_departure[],
                 char airport_arrival[], char date_departure[],
                 char time_departure[], char duration[], int capacity)
 {
@@ -86,9 +87,41 @@ int add_flights(flight flights[], char code[], char airport_departure[],
             return INVALID_FLIGHT_CODE_ID;
     }
     /* Check if there's already a flight with the same code on the same day. */
+    for (counter = 0; counter < FLIGHT_MAX; counter++)
+    {
+        if (!(strcmp(flights[counter].code, code)))
+        {
+            if (!strcmp(flights[counter].date_departure, date_departure))
+                return FLIGHT_ALREADY_EXISTS_ID;
+        }
+    }
 
     /* Check if both airports exist */
-    
+    for (counter = 0; counter < AIRPORT_MAX; counter++)
+    {
+        /* If it gets to UNDEFINED_AIRPORT, means it did not find the airport */
+        if (!(strcmp(airports[counter].id, UNDEFINED_AIRPORT)))
+            return NO_SUCH_AIRPORT_DEPARTURE_ID;
+
+        /* Check if the ID already exists. */
+        if (!(strcmp(airports[counter].id, airport_departure)))
+        {
+            break;
+        }
+    }
+
+    for (counter = 0; counter < AIRPORT_MAX; counter++)
+    {
+        /* If it gets to UNDEFINED_AIRPORT, means it did not find the airport */
+        if (!(strcmp(airports[counter].id, UNDEFINED_AIRPORT)))
+            return NO_SUCH_AIRPORT_ARRIVAL_ID;
+
+        /* Check if the ID already exists. */
+        if (!(strcmp(airports[counter].id, airport_arrival)))
+        {
+            break;
+        }
+    }
 
     /* Check if the date is valid  */
     date_departure_year = get_date_year(date_departure);
@@ -167,4 +200,21 @@ int add_flights(flight flights[], char code[], char airport_departure[],
         }
     }
     return TOO_MANY_FLIGHTS_ID;
+}
+
+
+/**
+ * Lists all floights in the system
+ */
+void list_all_flights(flight flights[])
+{
+    int counter;
+    for (counter = 0; counter < FLIGHT_MAX &&
+                      strcmp(flights[counter].code, UNDEFINED_FLIGHT);
+         counter++)
+        printf("%s %s %s %s %s\n", flights[counter].code,
+               flights[counter].airport_departure,
+               flights[counter].airport_arrival,
+               flights[counter].date_departure,
+               flights[counter].time_departure);
 }

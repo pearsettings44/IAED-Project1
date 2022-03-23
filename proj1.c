@@ -39,7 +39,7 @@ int handle_command(airport airports[], flight flights[])
         handle_list_airports_command(airports);
         return 1;
     case 'v':
-        handle_add_flight_command(flights);
+        handle_add_flight_command(airports, flights);
         return 1;
     case 'p':
         /* handle_list_flight_departure_command(); */
@@ -93,8 +93,6 @@ void handle_add_airport_command(airport airports[])
         printf(ERROR_TOO_MANY_AIPORTS);
     else if (value == DUPLICATE_AIRPORT_ID)
         printf(ERROR_DUPLICATE_AIRPORT);
-    else if (value == INVALID_DATE_ID)
-        printf(ERROR_INVALID_DATE);
     else
         printf(ADD_AIRPORT_SUCCESSFULLY, id);
 }
@@ -144,7 +142,7 @@ void handle_list_airports_command(airport airports[])
  * <date_departure> <time_departure>
  * If no arguments are passed, list all flights.
  */
-void handle_add_flight_command(flight flights[])
+void handle_add_flight_command(airport airports[], flight flights[])
 {
     char c;
     char code[FLIGHT_CODE], airport_departure[ID_LENGTH],
@@ -158,8 +156,16 @@ void handle_add_flight_command(flight flights[])
               date_departure, time_departure, duration, &capacity);
         empty++;
     }
+
+    /* If it's just the 'v' command without arguments */
+    if (!empty)
+    {
+        list_all_flights(flights);
+        return;
+    }
+
     /* Add flight to the airport system */
-    value = add_flights(flights, code, airport_departure, airport_arrival,
+    value = add_flights(airports, flights, code, airport_departure, airport_arrival,
                         date_departure, time_departure, duration, capacity);
 
     if (value == INVALID_FLIGHT_CODE_ID)
@@ -172,10 +178,10 @@ void handle_add_flight_command(flight flights[])
         printf(ERROR_INVALID_CAPACITY);
     if (value == INVALID_DATE_ID)
         printf(ERROR_INVALID_DATE);
-
-    /* If it's just the 'v' command without arguments */
-    if (!empty)
-    {
-        return;
-    }
+    if (value == NO_SUCH_AIRPORT_DEPARTURE_ID)
+        printf(ERROR_NO_SUCH_AIRPORT_ID, airport_departure);
+    if (value == NO_SUCH_AIRPORT_ARRIVAL_ID)
+        printf(ERROR_NO_SUCH_AIRPORT_ID, airport_arrival);
+    if (value == FLIGHT_ALREADY_EXISTS_ID)
+        printf(ERROR_FLIGHT_ALREADY_EXISTS);
 }
