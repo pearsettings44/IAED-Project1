@@ -30,6 +30,7 @@
 #define TOO_MANY_FLIGHTS_ID -2
 #define INVALID_DURATION_ID -3
 #define INVALID_CAPACITY_ID -4
+#define INVALID_DATE_ID -5
 
 #define ERROR_INVALID_FLIGHT_CODE "invalid flight code\n"
 #define ERROR_FLIGHT_ALREADY_EXISTS "flight already exists\n"
@@ -38,8 +39,15 @@
 #define ERROR_INVALID_DURATION "invalid duration\n"
 #define ERROR_INVALID_CAPACITY "invalid capacity\n"
 
-#define STARTING_DATE "01-01-2002"
+#define STARTING_DATE "01-01-2021"
+#define MAX_DATE_YEAR 2023
+#define MIN_DATE_YEAR 2021
 
+/* global variable: system date */
+extern char date[DATE_LENGTH];
+
+#define MIN_CAPACITY 10
+#define MAX_CAPACITY 100
 
 /* structs */
 typedef struct
@@ -59,21 +67,6 @@ typedef struct
     char duration[TIME_LENGTH];
     int capacity;
 } flight;
-
-/* typedef struct 
-{
-    int day;
-    int month;
-    int year;
-} date;
-
-typedef struct 
-{
-    int hours;
-    int minutes;
-} time;
- */
-
 
 /* proj.c */
 int handle_command(airport airports[], flight flights[]);

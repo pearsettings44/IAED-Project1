@@ -6,8 +6,7 @@
 #include <ctype.h>
 #include <string.h>
 
-/* global variable: system date */
-char date[DATE_LENGTH] = STARTING_DATE;  
+char date[DATE_LENGTH] = STARTING_DATE;
 
 int main()
 {
@@ -94,6 +93,8 @@ void handle_add_airport_command(airport airports[])
         printf(ERROR_TOO_MANY_AIPORTS);
     else if (value == DUPLICATE_AIRPORT_ID)
         printf(ERROR_DUPLICATE_AIRPORT);
+    else if (value == INVALID_DATE_ID)
+        printf(ERROR_INVALID_DATE);
     else
         printf(ADD_AIRPORT_SUCCESSFULLY, id);
 }
@@ -165,10 +166,12 @@ void handle_add_flight_command(flight flights[])
         printf(ERROR_INVALID_FLIGHT_CODE);
     if (value == TOO_MANY_AIPORTS_ID)
         printf(ERROR_TOO_MANY_FLIGTS);
-    if(value == INVALID_DURATION_ID)
+    if (value == INVALID_DURATION_ID)
         printf(ERROR_INVALID_DURATION);
-    if(value == INVALID_CAPACITY_ID)
+    if (value == INVALID_CAPACITY_ID)
         printf(ERROR_INVALID_CAPACITY);
+    if (value == INVALID_DATE_ID)
+        printf(ERROR_INVALID_DATE);
 
     /* If it's just the 'v' command without arguments */
     if (!empty)
