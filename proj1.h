@@ -93,9 +93,6 @@ void handle_list_airports_command(airport airports[]);
 void handle_add_flight_command(airport airports[], flight flights[],
                                date system_date);
 
-/* date.c */
-date setup_default_date(date date);
-
 /* airport.c */
 void setup_airports(airport airports[]);
 int add_airport(airport airports[], char id[], char country[], char city[]);
@@ -111,7 +108,9 @@ void setup_flights(flight flights[]);
 int check_flight_code(char code[]);
 int check_airport_departure_exist(airport airports[], char airport_departure[]);
 int check_airport_arrival_exist(airport airports[], char airport_arrival[]);
+int check_same_day_flights(flight flights[], char code[], date date_departure);
 int check_duration(time duration);
+int check_capacity(int capacity);
 int add_flights(airport airports[], flight flights[], char code[],
                 char airport_departure[],
                 char airport_arrival[], date date_departure,
