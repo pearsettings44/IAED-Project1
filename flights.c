@@ -34,23 +34,6 @@ int check_flight_code(char code[])
     return 0;
 }
 
-/**
- * Check if there's already a flight with the same code on the same day.
- */
-int check_same_day_flights(flight flights[], char code[], char date_departure[])
-{
-    int counter;
-    for (counter = 0; counter < FLIGHT_MAX; counter++)
-    {
-        if (!(strcmp(flights[counter].code, code)))
-        {
-            if (!strcmp(flights[counter].date_departure, date_departure))
-                return FLIGHT_ALREADY_EXISTS_ID;
-        }
-    }
-    return 0;
-}
-
 int check_airport_departure_exist(airport airports[], char airport_departure[])
 {
     int counter;
@@ -87,59 +70,28 @@ int check_airport_arrival_exist(airport airports[], char airport_arrival[])
     return 0;
 }
 
-int check_dates(int date_departure_year, int date_departure_month,
-                int date_departure_day, int current_year, int current_month,
-                int current_day)
+/**
+ * Check if there's already a flight with the same code on the same day.
+ */
+int check_same_day_flights(flight flights[], char code[], date date_departure)
 {
-    /* Check if date is in the accepted range */
-    if (date_departure_year > MAX_DATE_YEAR ||
-        date_departure_year < MIN_DATE_YEAR)
+    int counter;
+    for (counter = 0; counter < FLIGHT_MAX; counter++)
     {
-        return INVALID_DATE_ID;
-    }
-    /* Check is year difference is greater then 1 year */
-    if (current_year - date_departure_year > 1)
-    {
-        return INVALID_DATE_ID;
-    }
-    /* Check if it's more then 1 year difference but less then 2 years. */
-    if (date_departure_year < current_year)
-    {
-        if (date_departure_month < current_month)
+        if (!(strcmp(flights[counter].code, code)))
         {
-            return INVALID_DATE_ID;
-        }
-        if (date_departure_month == current_month)
-        {
-            if (date_departure_day < current_day)
-            {
-                return INVALID_DATE_ID;
-            }
-        }
-    }
-    /* Check dates in the same year */
-    if (date_departure_year == current_year)
-    {
-        if (date_departure_month < current_month)
-        {
-            return INVALID_DATE_ID;
-        }
-        if (date_departure_month == current_month)
-        {
-            if (date_departure_day < current_day)
-            {
-                return INVALID_DATE_ID;
-            }
+            if (flights[counter].date_departure.day == date_departure.day &&
+                flights[counter].date_departure.month == date_departure.month &&
+                flights[counter].date_departure.year == date_departure.year)
+                return FLIGHT_ALREADY_EXISTS_ID;
         }
     }
     return 0;
 }
 
-int check_duration(char duration[])
+int check_duration(time duration)
 {
-    if ((duration[0] >= '1' && duration[1] > '2') ||
-        (duration[0] == '1' && duration[1] == '2' &&
-         (duration[3] != '0' || duration[4] != '0')))
+    if (duration.hours > 12 || (duration.hours == 12 && duration.minutes != 0))
         return INVALID_DURATION_ID;
     return 0;
 }
@@ -157,19 +109,18 @@ int check_capacity(int capacity)
  */
 int add_flights(airport airports[], flight flights[], char code[],
                 char airport_departure[],
-                char airport_arrival[], char date_departure[],
-                char time_departure[], char duration[], int capacity)
+                char airport_arrival[], date date_departure,
+                time time_departure, time duration, int capacity,
+                date system_date)
 {
     int counter;
-    int date_departure_year, date_departure_month, date_departure_day;
-    int current_year, current_month, current_day;
 
     /* Check if the code is valid. */
     if (check_flight_code(code) == INVALID_FLIGHT_CODE_ID)
         return INVALID_FLIGHT_CODE_ID;
+
     /* Check if there's already a flight with the same code on the same day. */
-    if (check_same_day_flights(flights, code, date_departure) ==
-        FLIGHT_ALREADY_EXISTS_ID)
+    if (check_same_day_flights(flights, code, date_departure))
         return FLIGHT_ALREADY_EXISTS_ID;
 
     /* Check if both airports exist */
@@ -180,19 +131,8 @@ int add_flights(airport airports[], flight flights[], char code[],
         NO_SUCH_AIRPORT_ARRIVAL_ID)
         return NO_SUCH_AIRPORT_ARRIVAL_ID;
 
-    /* Get date as ints  */
-    date_departure_year = get_date_year(date_departure);
-    date_departure_month = get_date_month(date_departure);
-    date_departure_day = get_date_day(date_departure);
-
-    current_year = get_date_year(date);
-    current_month = get_date_month(date);
-    current_day = get_date_day(date);
-
     /* Check if dates are valid */
-    if (check_dates(date_departure_year, date_departure_month,
-                    date_departure_day, current_year, current_month,
-                    current_day) == INVALID_DATE_ID)
+    if (check_dates(date_departure, system_date) == INVALID_DATE_ID)
         return INVALID_DATE_ID;
 
     /* Check if duration is valid */
@@ -211,9 +151,13 @@ int add_flights(airport airports[], flight flights[], char code[],
             strcpy(flights[counter].code, code);
             strcpy(flights[counter].airport_departure, airport_departure);
             strcpy(flights[counter].airport_arrival, airport_arrival);
-            strcpy(flights[counter].date_departure, date_departure);
-            strcpy(flights[counter].time_departure, time_departure);
-            strcpy(flights[counter].duration, duration);
+            flights[counter].date_departure.day = date_departure.day;
+            flights[counter].date_departure.month = date_departure.month;
+            flights[counter].date_departure.year = date_departure.year;
+            flights[counter].time_departure.hours = time_departure.hours;
+            flights[counter].time_departure.minutes = time_departure.minutes;
+            flights[counter].duration.hours = duration.hours;
+            flights[counter].duration.minutes = duration.minutes;
             flights[counter].capacity = capacity;
             return 0;
         }
@@ -230,45 +174,12 @@ void list_all_flights(flight flights[])
     for (counter = 0; counter < FLIGHT_MAX &&
                       strcmp(flights[counter].code, UNDEFINED_FLIGHT);
          counter++)
-        printf("%s %s %s %s %s\n", flights[counter].code,
+        printf("%s %s %s %02d-%02d-%d %02d:%02d\n", flights[counter].code,
                flights[counter].airport_departure,
                flights[counter].airport_arrival,
-               flights[counter].date_departure,
-               flights[counter].time_departure);
-}
-/**
- * Lists all flights with airport_departure of airport_id.
- */
-void list_all_flights_from_departure(flight flights[], char airport_id[])
-{
-    int counter;
-    for (counter = 0; counter < FLIGHT_MAX; counter++)
-        {
-            if (!strcmp(flights[counter].code, UNDEFINED_FLIGHT))
-                break;
-            if (!strcmp(flights[counter].airport_departure, airport_id))
-            {
-                printf("%s %s %s %s\n", flights[counter].code,
-                       flights[counter].airport_arrival,
-                       flights[counter].date_departure,
-                       flights[counter].time_departure);
-            }
-        }
-}
-
-void list_all_flights_from_arrival(flight flights[], char airport_id[])
-{
-    int counter;
-    for (counter = 0; counter < FLIGHT_MAX; counter++)
-        {
-            if (!strcmp(flights[counter].code, UNDEFINED_FLIGHT))
-                break;
-            if (!strcmp(flights[counter].airport_departure, airport_id))
-            {
-                printf("%s %s %s %s\n", flights[counter].code,
-                       flights[counter].airport_departure,
-                       flights[counter].date_departure,
-                       flights[counter].time_departure);
-            }
-        }
+               flights[counter].date_departure.day,
+               flights[counter].date_departure.month,
+               flights[counter].date_departure.year,
+               flights[counter].time_departure.hours,
+               flights[counter].time_departure.minutes);
 }

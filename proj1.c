@@ -6,16 +6,16 @@
 #include <ctype.h>
 #include <string.h>
 
-char date[DATE_LENGTH] = STARTING_DATE;
-
 int main()
 {
+    date system_date;
     airport airports[AIRPORT_MAX];
     flight flights[FLIGHT_MAX];
+    system_date = setup_default_date(system_date);
     setup_airports(airports);
     setup_flights(flights);
     /* execute program until the user sends the 'q' command */
-    while (handle_command(airports, flights))
+    while (handle_command(airports, flights, system_date))
     {
     }
 
@@ -27,7 +27,7 @@ int main()
  * Returns 1 if the program should continue after running the command.
  * Otherwise, returns 0.
  */
-int handle_command(airport airports[], flight flights[])
+int handle_command(airport airports[], flight flights[], date system_date)
 {
     char command = getchar();
     switch (command)
@@ -39,13 +39,13 @@ int handle_command(airport airports[], flight flights[])
         handle_list_airports_command(airports);
         return 1;
     case 'v':
-        handle_add_flight_command(airports, flights);
+        handle_add_flight_command(airports, flights, system_date);
         return 1;
     case 'p':
-        handle_list_flight_departure_command(airports, flights);
+        /* handle_list_flight_departure_command(airports, flights); */
         return 1;
     case 'c':
-        handle_list_flight_arrival_command(airports, flights);
+        /* handle_list_flight_arrival_command(airports, flights); */
         return 1;
     case 't':
         /* handle_forward_date_command(); */
@@ -152,21 +152,40 @@ void handle_list_airports_command(airport airports[])
  * <date_departure> <time_departure>
  * If no arguments are passed, list all flights.
  */
-void handle_add_flight_command(airport airports[], flight flights[])
+void handle_add_flight_command(airport airports[], flight flights[], date system_date)
 {
     char c;
     char code[FLIGHT_CODE], airport_departure[ID_LENGTH],
-        airport_arrival[ID_LENGTH], date_departure[DATE_LENGTH],
-        time_departure[TIME_LENGTH], duration[TIME_LENGTH];
+        airport_arrival[ID_LENGTH];
+    int departure_day, departure_month, departure_year;
+    int departure_hour, departure_minutes;
+    int duration_hour, duration_minutes;
     int capacity, value, counter, empty = 0;
-
+    date date_departure;
+    time time_departure;
+    time duration;
     while ((c = getchar()) != '\n')
     {
-        scanf("%s %s %s %s %s %s %d", code, airport_departure, airport_arrival,
-              date_departure, time_departure, duration, &capacity);
-        empty++;
-    }
+        scanf("%s %s %s %d-%d-%d %d:%d %d:%d %d", code, airport_departure,
+              airport_arrival,
+              &departure_day, &departure_month, &departure_year,
+              &departure_hour, &departure_minutes,
+              &duration_hour, &duration_minutes,
+              &capacity);
 
+        empty++;
+
+        date_departure.day = departure_day;
+        date_departure.month = departure_month;
+        date_departure.year = departure_year;
+
+        time_departure.hours = departure_hour;
+        time_departure.minutes = departure_minutes;
+
+        duration.hours = duration_hour;
+        duration.minutes = duration_minutes;
+    }
+    
     /* If it's just the 'v' command without arguments */
     if (!empty)
     {
@@ -176,7 +195,8 @@ void handle_add_flight_command(airport airports[], flight flights[])
 
     /* Add flight to the airport system */
     value = add_flights(airports, flights, code, airport_departure, airport_arrival,
-                        date_departure, time_departure, duration, capacity);
+                        date_departure, time_departure, duration, capacity,
+                        system_date);
 
     if (value == INVALID_FLIGHT_CODE_ID)
         printf(ERROR_INVALID_FLIGHT_CODE);
@@ -208,7 +228,6 @@ void handle_add_flight_command(airport airports[], flight flights[])
     }
 }
 
-
 /**
  * Handles the 'p' command.
  * Lists the flights with departure airport of IDairport.
@@ -217,7 +236,7 @@ void handle_add_flight_command(airport airports[], flight flights[])
  * If no arguments are passed, list all airport in ID's alphabetically order.
  * If multiplate arguments are passed, list airport in order of input.
  */
-void handle_list_flight_departure_command(airport airports[], flight flights[])
+/* void handle_list_flight_departure_command(airport airports[], flight flights[])
 {
     char airport_id[ID_LENGTH];
     scanf("%s", airport_id);
@@ -229,8 +248,7 @@ void handle_list_flight_departure_command(airport airports[], flight flights[])
     {
         list_all_flights_from_departure(flights, airport_id);
     }
-}
-
+} */
 
 /**
  * Handles the 'c' command.
@@ -240,7 +258,7 @@ void handle_list_flight_departure_command(airport airports[], flight flights[])
  * If no arguments are passed, list all airport in ID's alphabetically order.
  * If multiplate arguments are passed, list airport in order of input.
  */
-void handle_list_flight_arrival_command(airport airports[], flight flights[])
+/* void handle_list_flight_arrival_command(airport airports[], flight flights[])
 {
     char airport_id[ID_LENGTH];
     scanf("%s", airport_id);
@@ -252,4 +270,4 @@ void handle_list_flight_arrival_command(airport airports[], flight flights[])
     {
         list_all_flights_from_arrival(flights, airport_id);
     }
-}
+} */

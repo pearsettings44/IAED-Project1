@@ -42,12 +42,12 @@
 #define ERROR_INVALID_DURATION "invalid duration\n"
 #define ERROR_INVALID_CAPACITY "invalid capacity\n"
 
-#define STARTING_DATE "01-01-2021"
+#define STARTING_DATE_DAY 1
+#define STARTING_DATE_MONTH 1
+#define STARTING_DATE_YEAR 2021
+
 #define MAX_DATE_YEAR 2023
 #define MIN_DATE_YEAR 2021
-
-/* global variable: system date */
-extern char date[DATE_LENGTH];
 
 #define MIN_CAPACITY 10
 #define MAX_CAPACITY 100
@@ -63,22 +63,38 @@ typedef struct
 
 typedef struct
 {
+    int hours;
+    int minutes;
+} time;
+
+typedef struct
+{
+    int day;
+    int month;
+    int year;
+} date;
+
+typedef struct
+{
     char code[FLIGHT_CODE];
     char airport_departure[ID_LENGTH];
     char airport_arrival[ID_LENGTH];
-    char date_departure[DATE_LENGTH];
-    char time_departure[TIME_LENGTH];
-    char duration[TIME_LENGTH];
+    date date_departure;
+    time time_departure;
+    time duration;
     int capacity;
 } flight;
 
+
 /* proj.c */
-int handle_command(airport airports[], flight flights[]);
+int handle_command(airport airports[], flight flights[], date system_date);
 void handle_add_airport_command(airport airports[]);
 void handle_list_airports_command(airport airports[]);
-void handle_add_flight_command(airport airports[], flight flights[]);
-void handle_list_flight_departure_command(airport airports[], flight flights[]);
-void handle_list_flight_arrival_command(airport airports[], flight flights[]);
+void handle_add_flight_command(airport airports[], flight flights[],
+                               date system_date);
+
+/* date.c */
+date setup_default_date(date date);
 
 /* airport.c */
 void setup_airports(airport airports[]);
@@ -86,29 +102,21 @@ int add_airport(airport airports[], char id[], char country[], char city[]);
 void sort_airports(airport airports[]);
 void list_all_airports(airport airports[]);
 
-/* time_and_date.c */
-int get_date_year(char char_date[]);
-int get_date_month(char char_date[]);
-int get_date_day(char char_date[]);
+/* date.c */
+date setup_default_date(date system_date);
+int check_dates(date departure_date, date system_date);
 
 /* flights.c */
 void setup_flights(flight flights[]);
 int check_flight_code(char code[]);
-int check_same_day_flights(flight flights[], char code[],
-                           char date_departure[]);
 int check_airport_departure_exist(airport airports[], char airport_departure[]);
 int check_airport_arrival_exist(airport airports[], char airport_arrival[]);
-int check_dates(int date_departure_year, int date_departure_month,
-                int date_departure_day, int current_year, int current_month,
-                int current_day);
-int check_duration(char duration[]);
+int check_duration(time duration);
 int add_flights(airport airports[], flight flights[], char code[],
                 char airport_departure[],
-                char airport_arrival[], char date_departure[],
-                char time_departure[], char duration[], int capacity);
+                char airport_arrival[], date date_departure,
+                time time_departure, time duration, int capacity,
+                date system_date);
 void list_all_flights(flight flights[]);
-void list_all_flights_from_departure(flight flights[], char airport_id[]);
-void list_all_flights_from_arrival(flight flights[], char airport_id[]);
-
 
 #endif
