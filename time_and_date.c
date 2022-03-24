@@ -50,3 +50,57 @@ int get_date_day(char char_date[])
     }
     return atoi(day);
 }
+
+int get_time_hours(char char_time[])
+{
+    int counterAux = 0, counter;
+    char hours[3];
+    for (counter = 0; counter < 2; counter++)
+    {
+        hours[counterAux] = char_time[counter];
+        counterAux++;
+    }
+    return atoi(hours);
+}
+
+int get_time_minutes(char char_time[])
+{
+    int counterAux = 0, counter;
+    char minutes[3];
+    for (counter = 0; counter < 2; counter++)
+    {
+        minutes[counterAux] = char_time[counter];
+        counterAux++;
+    }
+    return atoi(minutes);
+}
+
+void get_arrival_time(char time_departure[], char duration[])
+{
+    int hours_departure, minutes_departure, hours_duration, minutes_duration;
+    int arrival_hours, arrival_minutes;
+    hours_departure = get_time_hours(time_departure);
+    minutes_departure = get_time_minutes(time_departure);
+
+    hours_duration = get_time_hours(duration);
+    minutes_duration = get_time_minutes(duration);
+
+    if (hours_departure + hours_duration >= 24)
+    {
+        arrival_hours = hours_departure + hours_duration - 24;
+    }
+    else
+    {
+        arrival_hours = hours_departure + hours_duration;
+    }
+
+    if (minutes_departure + minutes_duration >= 60)
+    {
+        arrival_minutes = (minutes_departure + minutes_duration) % 60;
+        arrival_hours += 1;
+    }
+    else
+    {
+        arrival_minutes = minutes_departure + minutes_duration;
+    }
+}
