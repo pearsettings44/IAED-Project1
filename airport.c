@@ -7,7 +7,7 @@
 #include <string.h>
 
 /**
- * Sets the value of all aiports id to UNDEFINED_AIRPORT.
+ * Sets the value of all aiports id to UNDEFINED_AIRPORT, and flights to 0;
  */
 void setup_airports(airport airports[])
 {
@@ -15,6 +15,7 @@ void setup_airports(airport airports[])
     for (counter = 0; counter < AIRPORT_MAX; counter++)
     {
         strcpy(airports[counter].id, UNDEFINED_AIRPORT);
+        airports[counter].flights_quantity = 0;
     }
 }
 
@@ -33,6 +34,12 @@ int add_airport(airport airports[], char id[], char country[], char city[])
     {
         /* Check if ID has anything else then uppercase chars. */
         if (islower(id[counter]) || !isalpha(id[counter]))
+        {
+            return INVALID_AIPORT_ID;
+        }
+
+        /* Check if ID has length 3 */
+        if (strlen(id) != 3)
         {
             return INVALID_AIPORT_ID;
         }
@@ -93,6 +100,7 @@ void list_all_airports(airport airports[])
     for (counter = 0; counter < AIRPORT_MAX &&
                       strcmp(airports[counter].id, UNDEFINED_AIRPORT);
          counter++)
-        printf("%s %s %s\n", airports[counter].id,
-               airports[counter].city, airports[counter].country);
+        printf("%s %s %s %d\n", airports[counter].id,
+               airports[counter].city, airports[counter].country,
+               airports[counter].flights_quantity);
 }

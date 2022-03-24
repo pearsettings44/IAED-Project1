@@ -19,66 +19,11 @@ void setup_flights(flight flights[])
 }
 
 /**
- * Get the date year in int type.
+ * CHecks if the code is valid.
  */
-int get_date_year(char char_date[])
+int check_flight_code(char code[])
 {
-    int counterAux = 0, len = strlen(char_date), counter;
-    char year[5];
-    for (counter = 6; counter < len; counter++)
-    {
-        year[counterAux] = char_date[counter];
-        counterAux++;
-    }
-    return atoi(year);
-}
-
-/**
- * Get the date month in int type.
- */
-int get_date_month(char char_date[])
-{
-    int counterAux = 0, counter;
-    char month[3];
-    for (counter = 3; counter < 5; counter++)
-    {
-        month[counterAux] = char_date[counter];
-        counterAux++;
-    }
-    return atoi(month);
-}
-
-/**
- * Get the date year in int type.
- */
-int get_date_day(char char_date[])
-{
-    int counterAux = 0, counter;
-    char day[3];
-    for (counter = 0; counter < 2; counter++)
-    {
-        day[counterAux] = char_date[counter];
-        counterAux++;
-    }
-    return atoi(day);
-}
-
-/**
- * Adds a flight to the system.
- * Returns the ID that represents a new flight.
- * If the flight code is invalid, returns INVALID_FLIGHT_CODE_ID.
- */
-int add_flights(airport airports[], flight flights[], char code[],
-                char airport_departure[],
-                char airport_arrival[], char date_departure[],
-                char time_departure[], char duration[], int capacity)
-{
-    int counter;
-    int code_length = strlen(code) - 1;
-    int date_departure_year, date_departure_month, date_departure_day;
-    int current_year, current_month, current_day;
-
-    /* Check if the code is valid. */
+    int counter, code_length = strlen(code) - 1;
     if (!isupper(code[0]) || !isupper(code[1]))
         return INVALID_FLIGHT_CODE_ID;
     for (counter = 2; counter <= code_length; counter++)
@@ -86,7 +31,15 @@ int add_flights(airport airports[], flight flights[], char code[],
         if (!isdigit(code[counter]))
             return INVALID_FLIGHT_CODE_ID;
     }
-    /* Check if there's already a flight with the same code on the same day. */
+    return 0;
+}
+
+/**
+ * Check if there's already a flight with the same code on the same day.
+ */
+int check_same_day_flights(flight flights[], char code[], char date_departure[])
+{
+    int counter;
     for (counter = 0; counter < FLIGHT_MAX; counter++)
     {
         if (!(strcmp(flights[counter].code, code)))
@@ -95,8 +48,12 @@ int add_flights(airport airports[], flight flights[], char code[],
                 return FLIGHT_ALREADY_EXISTS_ID;
         }
     }
+    return 0;
+}
 
-    /* Check if both airports exist */
+int check_airport_departure_exist(airport airports[], char airport_departure[])
+{
+    int counter;
     for (counter = 0; counter < AIRPORT_MAX; counter++)
     {
         /* If it gets to UNDEFINED_AIRPORT, means it did not find the airport */
@@ -109,7 +66,12 @@ int add_flights(airport airports[], flight flights[], char code[],
             break;
         }
     }
+    return 0;
+}
 
+int check_airport_arrival_exist(airport airports[], char airport_arrival[])
+{
+    int counter;
     for (counter = 0; counter < AIRPORT_MAX; counter++)
     {
         /* If it gets to UNDEFINED_AIRPORT, means it did not find the airport */
@@ -122,16 +84,13 @@ int add_flights(airport airports[], flight flights[], char code[],
             break;
         }
     }
+    return 0;
+}
 
-    /* Check if the date is valid  */
-    date_departure_year = get_date_year(date_departure);
-    date_departure_month = get_date_month(date_departure);
-    date_departure_day = get_date_day(date_departure);
-
-    current_year = get_date_year(date);
-    current_month = get_date_month(date);
-    current_day = get_date_day(date);
-
+int check_dates(int date_departure_year, int date_departure_month,
+                int date_departure_day, int current_year, int current_month,
+                int current_day)
+{
     /* Check if date is in the accepted range */
     if (date_departure_year > MAX_DATE_YEAR ||
         date_departure_year < MIN_DATE_YEAR)
@@ -173,15 +132,75 @@ int add_flights(airport airports[], flight flights[], char code[],
             }
         }
     }
+    return 0;
+}
 
-    /* Check if duration is valid */
+int check_duration(char duration[])
+{
     if ((duration[0] >= '1' && duration[1] > '2') ||
         (duration[0] == '1' && duration[1] == '2' &&
          (duration[3] != '0' || duration[4] != '0')))
         return INVALID_DURATION_ID;
+    return 0;
+}
+
+int check_capacity(int capacity)
+{
+    if (capacity < MIN_CAPACITY || capacity > MAX_CAPACITY)
+        return INVALID_CAPACITY_ID;
+    return 0;
+}
+/**
+ * Adds a flight to the system.
+ * Returns the ID that represents a new flight.
+ * If the flight code is invalid, returns INVALID_FLIGHT_CODE_ID.
+ */
+int add_flights(airport airports[], flight flights[], char code[],
+                char airport_departure[],
+                char airport_arrival[], char date_departure[],
+                char time_departure[], char duration[], int capacity)
+{
+    int counter;
+    int date_departure_year, date_departure_month, date_departure_day;
+    int current_year, current_month, current_day;
+
+    /* Check if the code is valid. */
+    if (check_flight_code(code) == INVALID_FLIGHT_CODE_ID)
+        return INVALID_FLIGHT_CODE_ID;
+    /* Check if there's already a flight with the same code on the same day. */
+    if (check_same_day_flights(flights, code, date_departure) ==
+        FLIGHT_ALREADY_EXISTS_ID)
+        return FLIGHT_ALREADY_EXISTS_ID;
+
+    /* Check if both airports exist */
+    if (check_airport_departure_exist(airports, airport_departure) ==
+        NO_SUCH_AIRPORT_DEPARTURE_ID)
+        return NO_SUCH_AIRPORT_DEPARTURE_ID;
+    if (check_airport_arrival_exist(airports, airport_arrival) ==
+        NO_SUCH_AIRPORT_ARRIVAL_ID)
+        return NO_SUCH_AIRPORT_ARRIVAL_ID;
+
+    /* Get date as ints  */
+    date_departure_year = get_date_year(date_departure);
+    date_departure_month = get_date_month(date_departure);
+    date_departure_day = get_date_day(date_departure);
+
+    current_year = get_date_year(date);
+    current_month = get_date_month(date);
+    current_day = get_date_day(date);
+
+    /* Check if dates are valid */
+    if (check_dates(date_departure_year, date_departure_month,
+                    date_departure_day, current_year, current_month,
+                    current_day) == INVALID_DATE_ID)
+        return INVALID_DATE_ID;
+
+    /* Check if duration is valid */
+    if (check_duration(duration) == INVALID_DURATION_ID)
+        return INVALID_DURATION_ID;
 
     /* Check if capacity is valid */
-    if (capacity < MIN_CAPACITY || capacity > MAX_CAPACITY)
+    if (check_capacity(capacity) == INVALID_CAPACITY_ID)
         return INVALID_CAPACITY_ID;
 
     for (counter = 0; counter < FLIGHT_MAX; counter++)
@@ -202,9 +221,8 @@ int add_flights(airport airports[], flight flights[], char code[],
     return TOO_MANY_FLIGHTS_ID;
 }
 
-
 /**
- * Lists all floights in the system
+ * Lists all flights in the system
  */
 void list_all_flights(flight flights[])
 {
@@ -217,4 +235,40 @@ void list_all_flights(flight flights[])
                flights[counter].airport_arrival,
                flights[counter].date_departure,
                flights[counter].time_departure);
+}
+/**
+ * Lists all flights with airport_departure of airport_id.
+ */
+void list_all_flights_from_departure(flight flights[], char airport_id[])
+{
+    int counter;
+    for (counter = 0; counter < FLIGHT_MAX; counter++)
+        {
+            if (!strcmp(flights[counter].code, UNDEFINED_FLIGHT))
+                break;
+            if (!strcmp(flights[counter].airport_departure, airport_id))
+            {
+                printf("%s %s %s %s\n", flights[counter].code,
+                       flights[counter].airport_arrival,
+                       flights[counter].date_departure,
+                       flights[counter].time_departure);
+            }
+        }
+}
+
+void list_all_flights_from_arrival(flight flights[], char airport_id[])
+{
+    int counter;
+    for (counter = 0; counter < FLIGHT_MAX; counter++)
+        {
+            if (!strcmp(flights[counter].code, UNDEFINED_FLIGHT))
+                break;
+            if (!strcmp(flights[counter].airport_departure, airport_id))
+            {
+                printf("%s %s %s %s\n", flights[counter].code,
+                       flights[counter].airport_departure,
+                       flights[counter].date_departure,
+                       flights[counter].time_departure);
+            }
+        }
 }

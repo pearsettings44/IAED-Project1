@@ -77,6 +77,8 @@ int handle_command(airport airports[], flight flights[]);
 void handle_add_airport_command(airport airports[]);
 void handle_list_airports_command(airport airports[]);
 void handle_add_flight_command(airport airports[], flight flights[]);
+void handle_list_flight_departure_command(airport airports[], flight flights[]);
+void handle_list_flight_arrival_command(airport airports[], flight flights[]);
 
 /* airport.c */
 void setup_airports(airport airports[]);
@@ -84,14 +86,29 @@ int add_airport(airport airports[], char id[], char country[], char city[]);
 void sort_airports(airport airports[]);
 void list_all_airports(airport airports[]);
 
-/* flights.c */
-void setup_flights(flight flights[]);
+/* time_and_date.c */
 int get_date_year(char char_date[]);
 int get_date_month(char char_date[]);
+int get_date_day(char char_date[]);
+
+/* flights.c */
+void setup_flights(flight flights[]);
+int check_flight_code(char code[]);
+int check_same_day_flights(flight flights[], char code[],
+                           char date_departure[]);
+int check_airport_departure_exist(airport airports[], char airport_departure[]);
+int check_airport_arrival_exist(airport airports[], char airport_arrival[]);
+int check_dates(int date_departure_year, int date_departure_month,
+                int date_departure_day, int current_year, int current_month,
+                int current_day);
+int check_duration(char duration[]);
 int add_flights(airport airports[], flight flights[], char code[],
                 char airport_departure[],
                 char airport_arrival[], char date_departure[],
                 char time_departure[], char duration[], int capacity);
 void list_all_flights(flight flights[]);
+void list_all_flights_from_departure(flight flights[], char airport_id[]);
+void list_all_flights_from_arrival(flight flights[], char airport_id[]);
+
 
 #endif

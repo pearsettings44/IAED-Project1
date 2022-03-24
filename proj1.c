@@ -42,10 +42,10 @@ int handle_command(airport airports[], flight flights[])
         handle_add_flight_command(airports, flights);
         return 1;
     case 'p':
-        /* handle_list_flight_departure_command(); */
+        handle_list_flight_departure_command(airports, flights);
         return 1;
     case 'c':
-        /* handle_list_flight_arrival_command(); */
+        handle_list_flight_arrival_command(airports, flights);
         return 1;
     case 't':
         /* handle_forward_date_command(); */
@@ -69,6 +69,7 @@ int handle_command(airport airports[], flight flights[])
 void handle_add_airport_command(airport airports[])
 {
     int value;
+    int i;
     char c;
     char id[ID_LENGTH], country[COUNTRY_LENGTH], city[CITY_LENGTH] = {0},
                                                  cityaux[CITY_LENGTH];
@@ -77,11 +78,19 @@ void handle_add_airport_command(airport airports[])
     {
         scanf("%s", cityaux);
         /* If the city has more then one word */
-        if (c == ' ')
+        if (c == ' ' || c == '\t')
         {
             strcat(cityaux, " ");
         }
         strcat(city, cityaux);
+    }
+    for (i = strlen(city) - 1; i >= 0; i--)
+    {
+        if (city[i] == ' ')
+        {
+            city[i] = '\0';
+            break;
+        }
     }
 
     /* Add aiport to the airport system */
@@ -120,8 +129,9 @@ void handle_list_airports_command(airport airports[])
             printf(ERROR_NO_SUCH_AIRPORT_ID, id);
         else
         {
-            printf("%s %s %s\n", airports[counter].id,
-                   airports[counter].city, airports[counter].country);
+            printf("%s %s %s %d\n", airports[counter].id,
+                   airports[counter].city, airports[counter].country,
+                   airports[counter].flights_quantity);
             empty++;
         }
     }
@@ -148,7 +158,7 @@ void handle_add_flight_command(airport airports[], flight flights[])
     char code[FLIGHT_CODE], airport_departure[ID_LENGTH],
         airport_arrival[ID_LENGTH], date_departure[DATE_LENGTH],
         time_departure[TIME_LENGTH], duration[TIME_LENGTH];
-    int capacity, value, empty = 0;
+    int capacity, value, counter, empty = 0;
 
     while ((c = getchar()) != '\n')
     {
@@ -185,6 +195,61 @@ void handle_add_flight_command(airport airports[], flight flights[])
     else if (value == FLIGHT_ALREADY_EXISTS_ID)
         printf(ERROR_FLIGHT_ALREADY_EXISTS);
     else
-    {  
+    {
+        /* Add flight to the airport */
+        for (counter = 0; counter < AIRPORT_MAX; counter++)
+        {
+            /* Check if the ID already exists. */
+            if (!(strcmp(airports[counter].id, airport_departure)))
+            {
+                airports[counter].flights_quantity += 1;
+            }
+        }
+    }
+}
+
+
+/**
+ * Handles the 'p' command.
+ * Lists the flights with departure airport of IDairport.
+ * input format: p <IDAirport>
+ * output format: <code> <IDAirport Arrival> <date_departure> <time_departure>
+ * If no arguments are passed, list all airport in ID's alphabetically order.
+ * If multiplate arguments are passed, list airport in order of input.
+ */
+void handle_list_flight_departure_command(airport airports[], flight flights[])
+{
+    char airport_id[ID_LENGTH];
+    scanf("%s", airport_id);
+
+    if (check_airport_departure_exist(airports, airport_id) ==
+        NO_SUCH_AIRPORT_DEPARTURE_ID)
+        printf(ERROR_NO_SUCH_AIRPORT_ID, airport_id);
+    else
+    {
+        list_all_flights_from_departure(flights, airport_id);
+    }
+}
+
+
+/**
+ * Handles the 'c' command.
+ * Lists the flights with arrival airport of IDairport.
+ * input format: p <IDAirport>
+ * output format: <code> <IDAirport departure> <date_arrival> <time_arrival>
+ * If no arguments are passed, list all airport in ID's alphabetically order.
+ * If multiplate arguments are passed, list airport in order of input.
+ */
+void handle_list_flight_arrival_command(airport airports[], flight flights[])
+{
+    char airport_id[ID_LENGTH];
+    scanf("%s", airport_id);
+
+    if (check_airport_departure_exist(airports, airport_id) ==
+        NO_SUCH_AIRPORT_DEPARTURE_ID)
+        printf(ERROR_NO_SUCH_AIRPORT_ID, airport_id);
+    else
+    {
+        list_all_flights_from_arrival(flights, airport_id);
     }
 }
