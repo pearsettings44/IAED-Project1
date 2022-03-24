@@ -104,3 +104,45 @@ void list_all_airports(airport airports[])
                airports[counter].city, airports[counter].country,
                airports[counter].flights_quantity);
 }
+
+/**
+ * Check if a airport of departure actually exists.
+ */
+int check_airport_departure_exist(airport airports[], char airport_departure[])
+{
+    int counter;
+    for (counter = 0; counter < AIRPORT_MAX; counter++)
+    {
+        /* If it gets to UNDEFINED_AIRPORT, means it did not find the airport */
+        if (!(strcmp(airports[counter].id, UNDEFINED_AIRPORT)))
+            return NO_SUCH_AIRPORT_DEPARTURE_ID;
+
+        /* Check if the ID already exists. */
+        if (!(strcmp(airports[counter].id, airport_departure)))
+        {
+            break;
+        }
+    }
+    return 0;
+}
+
+/**
+ * Check if a airport of arrival actually exists.
+ */
+int check_airport_arrival_exist(airport airports[], char airport_arrival[])
+{
+    int counter;
+    for (counter = 0; counter < AIRPORT_MAX; counter++)
+    {
+        /* If it gets to UNDEFINED_AIRPORT, means it did not find the airport */
+        if (!(strcmp(airports[counter].id, UNDEFINED_AIRPORT)))
+            return NO_SUCH_AIRPORT_ARRIVAL_ID;
+
+        /* Check if the ID already exists. */
+        if (!(strcmp(airports[counter].id, airport_arrival)))
+        {
+            break;
+        }
+    }
+    return 0;
+}

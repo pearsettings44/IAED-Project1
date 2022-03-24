@@ -6,6 +6,9 @@
 #include <ctype.h>
 #include <string.h>
 
+/**
+ * Initialize the system date with default values.
+ */
 date setup_default_date(date system_date)
 {
     system_date.day = STARTING_DATE_DAY;
@@ -14,6 +17,9 @@ date setup_default_date(date system_date)
     return system_date;
 }
 
+/**
+ * Check if the date is valid.
+ */
 int check_dates(date departure_date, date system_date)
 {
     /* Check if date is in the accepted range */
@@ -60,6 +66,9 @@ int check_dates(date departure_date, date system_date)
     return 0;
 }
 
+/**
+ * Find the older date.
+ */
 int find_older_date(date date1, date date2, time time1, time time2)
 {
     if (date2.year < date1.year)
@@ -86,3 +95,38 @@ int find_older_date(date date1, date date2, time time1, time time2)
     }
     return 0;
 }
+
+time forward_time(time time_departure, time duration)
+{
+    time time_arrival;
+    int time_hours, time_minutes, duration_hours, duration_minutes;
+    int time_arrival_hours = 0, time_arrival_minutes = 0;
+    time_hours = time_departure.hours;
+    time_minutes = time_departure.minutes;
+    duration_hours = duration.hours;
+    duration_minutes = duration.minutes;
+
+    if(time_minutes + duration_minutes > 59)
+    {
+        time_arrival_minutes = (time_minutes + duration_minutes) %  60;
+        time_arrival_hours +=1;
+    }
+    else
+    {
+        time_arrival_minutes = time_minutes + duration_minutes;
+    }
+
+    if(time_hours + duration_hours > 23)
+    {
+        time_arrival_hours -= 24;
+        time_arrival_hours += duration_hours;
+    }
+    else
+    {
+        time_arrival_hours = time_hours + duration_hours;
+    }
+    
+    time_arrival.hours = time_arrival_hours;
+    time_arrival.minutes = time_arrival_minutes;
+    return time_arrival;
+    }

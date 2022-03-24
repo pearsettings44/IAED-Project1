@@ -42,10 +42,10 @@ int handle_command(airport airports[], flight flights[], date system_date)
         handle_add_flight_command(airports, flights, system_date);
         return 1;
     case 'p':
-        /* handle_list_flight_departure_command(airports, flights); */
+        handle_list_flight_departure_command(airports, flights);
         return 1;
     case 'c':
-        /* handle_list_flight_arrival_command(airports, flights); */
+        handle_list_flight_arrival_command(airports, flights);
         return 1;
     case 't':
         /* handle_forward_date_command(); */
@@ -236,7 +236,7 @@ void handle_add_flight_command(airport airports[], flight flights[], date system
  * If no arguments are passed, list all airport in ID's alphabetically order.
  * If multiplate arguments are passed, list airport in order of input.
  */
-/* void handle_list_flight_departure_command(airport airports[], flight flights[])
+void handle_list_flight_departure_command(airport airports[], flight flights[])
 {
     char airport_id[ID_LENGTH];
     scanf("%s", airport_id);
@@ -246,9 +246,9 @@ void handle_add_flight_command(airport airports[], flight flights[], date system
         printf(ERROR_NO_SUCH_AIRPORT_ID, airport_id);
     else
     {
-        list_all_flights_from_departure(flights, airport_id);
+        list_flights_sorted_departure(flights, airport_id);
     }
-} */
+}
 
 /**
  * Handles the 'c' command.
@@ -258,7 +258,7 @@ void handle_add_flight_command(airport airports[], flight flights[], date system
  * If no arguments are passed, list all airport in ID's alphabetically order.
  * If multiplate arguments are passed, list airport in order of input.
  */
-/* void handle_list_flight_arrival_command(airport airports[], flight flights[])
+void handle_list_flight_arrival_command(airport airports[], flight flights[])
 {
     char airport_id[ID_LENGTH];
     scanf("%s", airport_id);
@@ -268,6 +268,6 @@ void handle_add_flight_command(airport airports[], flight flights[], date system
         printf(ERROR_NO_SUCH_AIRPORT_ID, airport_id);
     else
     {
-        list_all_flights_from_arrival(flights, airport_id);
+        list_flights_sorted_arrival(flights, airport_id);
     }
-} */
+}
