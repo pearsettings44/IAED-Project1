@@ -60,3 +60,29 @@ int check_dates(date departure_date, date system_date)
     return 0;
 }
 
+int find_older_date(date date1, date date2, time time1, time time2)
+{
+    if (date2.year < date1.year)
+        return DATE2_IS_CLOSER;
+    else if (date2.month < date1.month)
+        return DATE2_IS_CLOSER;
+    else if (date2.day < date1.day)
+        return DATE2_IS_CLOSER;
+    else if (date2.day == date1.day)
+    {
+        if (time2.hours < time1.hours)
+            return DATE2_IS_CLOSER;
+        else if (time2.hours == time1.hours)
+        {
+            if (time2.minutes < time1.minutes)
+                return DATE2_IS_CLOSER;
+            else
+                return 0;
+        }
+    }
+    else
+    {
+        return 0;
+    }
+    return 0;
+}

@@ -52,6 +52,8 @@
 #define MIN_CAPACITY 10
 #define MAX_CAPACITY 100
 
+#define DATE2_IS_CLOSER -1
+
 /* structs */
 typedef struct
 {
@@ -85,7 +87,6 @@ typedef struct
     int capacity;
 } flight;
 
-
 /* proj.c */
 int handle_command(airport airports[], flight flights[], date system_date);
 void handle_add_airport_command(airport airports[]);
@@ -102,6 +103,7 @@ void list_all_airports(airport airports[]);
 /* date.c */
 date setup_default_date(date system_date);
 int check_dates(date departure_date, date system_date);
+int find_older_date(date date1, date date2, time time1, time time2);
 
 /* flights.c */
 void setup_flights(flight flights[]);
@@ -116,6 +118,8 @@ int add_flights(airport airports[], flight flights[], char code[],
                 char airport_arrival[], date date_departure,
                 time time_departure, time duration, int capacity,
                 date system_date);
+void sort_flights(flight flights[], int len);
 void list_all_flights(flight flights[]);
+void list_all_flights_sorted(flight flights[]);
 
 #endif

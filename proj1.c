@@ -185,7 +185,7 @@ void handle_add_flight_command(airport airports[], flight flights[], date system
         duration.hours = duration_hour;
         duration.minutes = duration_minutes;
     }
-    
+
     /* If it's just the 'v' command without arguments */
     if (!empty)
     {
