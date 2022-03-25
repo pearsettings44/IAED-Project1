@@ -125,16 +125,15 @@ void handle_list_airports_command(airport airports[])
         scanf("%s", id);
         while (strcmp(airports[counter].id, id) && counter < AIRPORT_MAX - 1)
             counter++;
-        { /* Check if the ID already exists */
-            if (counter == AIRPORT_MAX - 1)
-                printf(ERROR_NO_SUCH_AIRPORT_ID, id);
-            else
-            {
-                printf("%s %s %s %d\n", airports[counter].id,
-                       airports[counter].city, airports[counter].country,
-                       airports[counter].flights_quantity);
-                empty++;
-            }
+        /* Check if the ID already exists */
+        if (counter == AIRPORT_MAX - 1)
+            printf(ERROR_NO_SUCH_AIRPORT_ID, id);
+        else
+        {
+            printf("%s %s %s %d\n", airports[counter].id,
+                   airports[counter].city, airports[counter].country,
+                   airports[counter].flights_quantity);
+            empty++;
         }
     }
     /* If it's just the 'l' command without arguments */
@@ -154,7 +153,8 @@ void handle_list_airports_command(airport airports[])
  * <date_departure> <time_departure>
  * If no arguments are passed, list all flights.
  */
-void handle_add_flight_command(airport airports[], flight flights[], date system_date)
+void handle_add_flight_command(airport airports[], flight flights[],
+                               date system_date)
 {
     char c;
     char code[FLIGHT_CODE], airport_departure[ID_LENGTH],
@@ -164,8 +164,7 @@ void handle_add_flight_command(airport airports[], flight flights[], date system
     int duration_hour, duration_minutes;
     int capacity, value, counter, empty = 0;
     date date_departure;
-    time time_departure;
-    time duration;
+    time time_departure, duration;
     while ((c = getchar()) != '\n')
     {
         scanf("%s %s %s %d-%d-%d %d:%d %d:%d %d", code, airport_departure,
@@ -200,24 +199,33 @@ void handle_add_flight_command(airport airports[], flight flights[], date system
                         date_departure, time_departure, duration, capacity,
                         system_date);
 
-    if (value == INVALID_FLIGHT_CODE_ID)
-        printf(ERROR_INVALID_FLIGHT_CODE);
-    else if (value == TOO_MANY_AIPORTS_ID)
-        printf(ERROR_TOO_MANY_FLIGTS);
-    else if (value == INVALID_DURATION_ID)
-        printf(ERROR_INVALID_DURATION);
-    else if (value == INVALID_CAPACITY_ID)
-        printf(ERROR_INVALID_CAPACITY);
-    else if (value == INVALID_DATE_ID)
-        printf(ERROR_INVALID_DATE);
-    else if (value == NO_SUCH_AIRPORT_DEPARTURE_ID)
-        printf(ERROR_NO_SUCH_AIRPORT_ID, airport_departure);
-    else if (value == NO_SUCH_AIRPORT_ARRIVAL_ID)
-        printf(ERROR_NO_SUCH_AIRPORT_ID, airport_arrival);
-    else if (value == FLIGHT_ALREADY_EXISTS_ID)
-        printf(ERROR_FLIGHT_ALREADY_EXISTS);
-    else
+    switch (value)
     {
+    case INVALID_FLIGHT_CODE_ID:
+        printf(ERROR_INVALID_FLIGHT_CODE);
+        break;
+    case TOO_MANY_AIPORTS_ID:
+        printf(ERROR_TOO_MANY_FLIGTS);
+        break;
+    case INVALID_DURATION_ID:
+        printf(ERROR_INVALID_DURATION);
+        break;
+    case INVALID_CAPACITY_ID:
+        printf(ERROR_INVALID_CAPACITY);
+        break;
+    case INVALID_DATE_ID:
+        printf(ERROR_INVALID_DATE);
+        break;
+    case NO_SUCH_AIRPORT_DEPARTURE_ID:
+        printf(ERROR_NO_SUCH_AIRPORT_ID, airport_departure);
+        break;
+    case NO_SUCH_AIRPORT_ARRIVAL_ID:
+        printf(ERROR_NO_SUCH_AIRPORT_ID, airport_arrival);
+        break;
+    case FLIGHT_ALREADY_EXISTS_ID:
+        printf(ERROR_FLIGHT_ALREADY_EXISTS);
+        break;
+    default:
         /* Add flight to the airport */
         for (counter = 0; counter < AIRPORT_MAX; counter++)
         {
@@ -226,6 +234,7 @@ void handle_add_flight_command(airport airports[], flight flights[], date system
             {
                 airports[counter].flights_quantity += 1;
             }
+            break;
         }
     }
 }
