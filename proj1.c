@@ -13,6 +13,7 @@ int main()
     airport airports[AIRPORT_MAX];
     flight flights[FLIGHT_MAX];
     system_date = setup_default_date(system_date);
+
     setup_airports(airports);
     setup_flights(flights);
     /* execute program until the user sends the 'q' command */
@@ -31,6 +32,7 @@ int main()
 int handle_command(airport airports[], flight flights[], date system_date)
 {
     char command = getchar();
+
     switch (command)
     {
     case 'a':
@@ -69,30 +71,37 @@ int handle_command(airport airports[], flight flights[], date system_date)
  */
 void handle_add_airport_command(airport airports[])
 {
-    int value;
-    int i = 0;
-    char c;
-    char id[ID_LENGTH], country[COUNTRY_LENGTH], city[CITY_LENGTH];
+    int value, counter = 0;
+    char c, id[ID_LENGTH], country[COUNTRY_LENGTH], city[CITY_LENGTH];
+
     scanf("%s %s", id, country);
-    c =getchar();
-    while ((c = getchar()) != '\n' && i < CITY_LENGTH - 1)
+    c = getchar();
+    /* Get the airport city, which can be more then just one word. */
+    while ((c = getchar()) != '\n' && counter < CITY_LENGTH - 1)
     {
-        city[i] = c;
-        i++;
+        city[counter] = c;
+        counter++;
     }
-    city[i] = '\0';
+    city[counter] = '\0';
 
     /* Add aiport to the airport system */
     value = add_airport(airports, id, country, city);
 
-    if (value == INVALID_AIPORT_ID)
+    switch (value)
+    {
+    case INVALID_AIPORT_ID:
         printf(ERROR_INVALID_AIPORT_ID);
-    else if (value == TOO_MANY_AIPORTS_ID)
+        break;
+    case TOO_MANY_AIPORTS_ID:
         printf(ERROR_TOO_MANY_AIPORTS);
-    else if (value == DUPLICATE_AIRPORT_ID)
+        break;
+    case DUPLICATE_AIRPORT_ID:
         printf(ERROR_DUPLICATE_AIRPORT);
-    else
+        break;
+    default:
         printf(ADD_AIRPORT_SUCCESSFULLY, id);
+        break;
+    }
 }
 
 /**
@@ -107,13 +116,16 @@ void handle_list_airports_command(airport airports[])
 {
     int counter, empty = 0;
     char c, id[ID_LENGTH];
+
     while ((c = getchar()) != '\n')
     {
         counter = 0;
         scanf("%s", id);
+        /* Find the index of first undefinied airport */
         while (strcmp(airports[counter].id, id) && counter < AIRPORT_MAX - 1)
             counter++;
-        /* Check if the ID already exists */
+        /* If it reached the end of airports, it means there was no
+        sucessful match */
         if (counter == AIRPORT_MAX - 1)
         {
             printf(ERROR_NO_SUCH_AIRPORT_ID, id);
@@ -129,7 +141,8 @@ void handle_list_airports_command(airport airports[])
             empty++;
         }
     }
-    /* If it's just the 'l' command without arguments */
+    /* If it's just the 'l' command without arguments, list all airports
+    sorted by their id. */
     if (!empty)
     {
         sort_airports(airports);
@@ -149,27 +162,24 @@ void handle_list_airports_command(airport airports[])
 void handle_add_flight_command(airport airports[], flight flights[],
                                date system_date)
 {
-    char c;
-    char code[FLIGHT_CODE], airport_departure[ID_LENGTH],
+    char c, code[FLIGHT_CODE], airport_departure[ID_LENGTH],
         airport_arrival[ID_LENGTH];
+    int capacity, value, counter, empty = 0;
     int departure_day, departure_month, departure_year;
     int departure_hour, departure_minutes;
     int duration_hour, duration_minutes;
-    int capacity, value, counter, empty = 0;
     date date_departure;
     time time_departure, duration;
 
     while ((c = getchar()) != '\n')
     {
+        /* Get flight attributes. */
         scanf("%s %s %s %d-%d-%d %d:%d %d:%d %d", code, airport_departure,
-              airport_arrival,
-              &departure_day, &departure_month, &departure_year,
-              &departure_hour, &departure_minutes,
-              &duration_hour, &duration_minutes,
-              &capacity);
+              airport_arrival, &departure_day, &departure_month,
+              &departure_year, &departure_hour, &departure_minutes,
+              &duration_hour, &duration_minutes, &capacity);
 
-        empty++;
-
+        /* Define flight attributes .*/
         date_departure.day = departure_day;
         date_departure.month = departure_month;
         date_departure.year = departure_year;
@@ -179,9 +189,12 @@ void handle_add_flight_command(airport airports[], flight flights[],
 
         duration.hours = duration_hour;
         duration.minutes = duration_minutes;
+
+        empty++;
     }
 
-    /* If it's just the 'v' command without arguments */
+    /* If it's just the 'v' command without arguments, list all flights,
+    in order of input. */
     if (!empty)
     {
         list_all_flights(flights);
@@ -220,7 +233,7 @@ void handle_add_flight_command(airport airports[], flight flights[],
         printf(ERROR_FLIGHT_ALREADY_EXISTS);
         break;
     default:
-        /* Add flight to the airport */
+        /* Increment the number of flights in the departure airport. */
         for (counter = 0; counter < AIRPORT_MAX; counter++)
         {
             if (!(strcmp(airports[counter].id, airport_departure)))
@@ -243,14 +256,17 @@ void handle_add_flight_command(airport airports[], flight flights[],
 void handle_list_flight_departure_command(airport airports[], flight flights[])
 {
     char airport_id[ID_LENGTH];
-    scanf("%s", airport_id);
 
-    if (check_airport_departure_exist(airports, airport_id) ==
-        NO_SUCH_AIRPORT_DEPARTURE_ID)
-        printf(ERROR_NO_SUCH_AIRPORT_ID, airport_id);
-    else
+    scanf("%s", airport_id);
+    switch (check_airport_departure_exist(airports, airport_id))
     {
+    case NO_SUCH_AIRPORT_DEPARTURE_ID:
+        printf(ERROR_NO_SUCH_AIRPORT_ID, airport_id);
+        break;
+
+    default:
         list_flights_sorted_departure(flights, airport_id);
+        break;
     }
 }
 
@@ -301,4 +317,3 @@ void handle_forward_date_command()
                system_date.year);
     }
 }
-
