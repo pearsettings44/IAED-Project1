@@ -165,6 +165,7 @@ void handle_add_flight_command(airport airports[], flight flights[],
     int capacity, value, counter, empty = 0;
     date date_departure;
     time time_departure, duration;
+
     while ((c = getchar()) != '\n')
     {
         scanf("%s %s %s %d-%d-%d %d:%d %d:%d %d", code, airport_departure,

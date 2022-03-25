@@ -15,7 +15,6 @@ void setup_airports(airport airports[])
     for (counter = 0; counter < AIRPORT_MAX; counter++)
     {
         strcpy(airports[counter].id, UNDEFINED_AIRPORT);
-        airports[counter].flights_quantity = 0;
     }
 }
 
@@ -59,10 +58,10 @@ int add_airport(airport airports[], char id[], char country[], char city[])
             strcpy(airports[counter].id, id);
             strcpy(airports[counter].country, country);
             strcpy(airports[counter].city, city);
+            airports[counter].flights_quantity = 0;
             return 0;
         }
     }
-
     return TOO_MANY_AIPORTS_ID;
 }
 
@@ -77,9 +76,18 @@ void sort_airports(airport airports[])
     /* Loop through airports */
     for (counterAux = 0; counterAux < AIRPORT_MAX - 1; counterAux++)
     {
+
+        if (!strcmp(airports[counterAux].id, UNDEFINED_AIRPORT))
+        {
+            break;
+        }
         /* Loop through airports ID */
         for (counter = 0; counter < AIRPORT_MAX - 1; counter++)
         {
+            if (!strcmp(airports[counter].id, UNDEFINED_AIRPORT))
+            {
+                break;
+            }
             /* Sort airports by alphabetical order of the ID */
             if (strcmp(airports[counter].id, airports[counter + 1].id) > 0)
             {
@@ -97,12 +105,14 @@ void sort_airports(airport airports[])
 void list_all_airports(airport airports[])
 {
     int counter;
-    for (counter = 0; counter < AIRPORT_MAX &&
-                      strcmp(airports[counter].id, UNDEFINED_AIRPORT);
-         counter++)
+    for (counter = 0; counter < AIRPORT_MAX; counter++)
+    {
+        if(!strcmp(airports[counter].id, UNDEFINED_AIRPORT))
+            break;
         printf("%s %s %s %d\n", airports[counter].id,
                airports[counter].city, airports[counter].country,
                airports[counter].flights_quantity);
+    }
 }
 
 /**

@@ -209,10 +209,11 @@ void list_flights_sorted_departure(flight flights[], char airport_id[])
 void list_flights_sorted_arrival(flight flights[], char airport_id[])
 {
     flight flights_aux[FLIGHT_MAX];
-    int counter, counterAux = 0;
+    int counter, counterAux;
     int hours_before, hours_after;
     time arrival_time;
     date arrival_date;
+    counterAux = 0;
     for (counter = 0; counter < FLIGHT_MAX; counter++)
     {
 
@@ -270,9 +271,10 @@ void list_flights_sorted_arrival(flight flights[], char airport_id[])
 void list_all_flights(flight flights[])
 {
     int counter;
-    for (counter = 0; counter < FLIGHT_MAX &&
-                      strcmp(flights[counter].code, UNDEFINED_FLIGHT);
-         counter++)
+    for (counter = 0; counter < FLIGHT_MAX; counter++)
+    {
+        if (!strcmp(flights[counter].code, UNDEFINED_FLIGHT))
+            break;
         printf("%s %s %s %02d-%02d-%d %02d:%02d\n", flights[counter].code,
                flights[counter].airport_departure,
                flights[counter].airport_arrival,
@@ -281,4 +283,5 @@ void list_all_flights(flight flights[])
                flights[counter].date_departure.year,
                flights[counter].time_departure.hours,
                flights[counter].time_departure.minutes);
+    }
 }
