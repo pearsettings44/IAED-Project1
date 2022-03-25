@@ -49,7 +49,7 @@ int handle_command(airport airports[], flight flights[], date system_date)
         handle_list_flight_arrival_command(airports, flights);
         return 1;
     case 't':
-        handle_forward_date_command(system_date);
+        handle_forward_date_command();
         return 1;
     case 'q':
         /* stop the program */
@@ -131,7 +131,8 @@ void handle_list_airports_command(airport airports[])
         {
             printf(ERROR_NO_SUCH_AIRPORT_ID, id);
             empty++;
-            continue;;
+            continue;
+            ;
         }
         else
         {
@@ -235,12 +236,11 @@ void handle_add_flight_command(airport airports[], flight flights[],
         /* Add flight to the airport */
         for (counter = 0; counter < AIRPORT_MAX; counter++)
         {
-            /* Check if the ID already exists. */
             if (!(strcmp(airports[counter].id, airport_departure)))
             {
                 airports[counter].flights_quantity += 1;
+                break;
             }
-            break;
         }
     }
 }
@@ -289,13 +289,28 @@ void handle_list_flight_arrival_command(airport airports[], flight flights[])
     }
 }
 
-void handle_forward_date_command(date system_date)
+/**
+ * Handles the 't' command.
+ * Forwards the system date.
+ * input format: t <date>
+ * output format: <date>
+ */
+void handle_forward_date_command()
 {
     int day, month, year;
+    date new_date;
     scanf("%d-%d-%d", &day, &month, &year);
-    system_date.day = day;
-    system_date.month = month;
-    system_date.year = year;
-    printf("%02d-%02d-%04d\n", system_date.day, system_date.month,
-           system_date.year);
+    new_date.day = day;
+    new_date.month = month;
+    new_date.year = year;
+    if (check_dates(new_date, system_date) == INVALID_DATE_ID)
+        printf(ERROR_INVALID_DATE);
+    else
+    {
+        system_date.day = new_date.day;
+        system_date.month = new_date.month;
+        system_date.year = new_date.year;
+        printf("%02d-%02d-%04d\n", system_date.day, system_date.month,
+               system_date.year);
+    }
 }
