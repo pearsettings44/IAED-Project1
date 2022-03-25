@@ -20,34 +20,37 @@ date setup_default_date(date system_date)
 /**
  * Check if the date is valid.
  */
-int check_dates(date departure_date, date system_date)
+int check_dates(date checkme_date, date system_date)
 {
+    int year = checkme_date.year, month = checkme_date.month,
+        day = checkme_date.day;
+    int system_year = system_date.year, system_month = system_date.month,
+        system_day = system_date.day;
+
     /* Check if date is in the accepted range */
-    if (departure_date.year > MAX_DATE_YEAR ||
-        departure_date.year < MIN_DATE_YEAR)
+    if (year > MAX_DATE_YEAR || year < MIN_DATE_YEAR)
         return INVALID_DATE_ID;
 
     /* Check same year dates */
-    if (departure_date.year == system_date.year)
+    if (year == system_year)
     {
-        if (departure_date.month < system_date.month)
+        if (month < system_month)
             return INVALID_DATE_ID;
 
-        if (departure_date.month == system_date.month)
-            if (departure_date.day < system_date.day)
+        if (month == system_month)
+            if (day < system_day)
                 return INVALID_DATE_ID;
-    }
-    if (departure_date.year > system_date.year)
-    {
-        if (departure_date.month > system_date.month)
-            return INVALID_DATE_ID;
-        if (departure_date.month == system_date.month)
-        {
-            if (departure_date.day > system_date.day)
-                return INVALID_DATE_ID;
-        }
     }
 
+    /* Check when date year is bigger then system year */
+    if (year > system_year)
+    {
+        if (month > system_month)
+            return INVALID_DATE_ID;
+        if (month == system_month)
+            if (day > system_day)
+                return INVALID_DATE_ID;
+    }
     return 0;
 }
 
@@ -56,28 +59,34 @@ int check_dates(date departure_date, date system_date)
  */
 int find_older_date(date date1, date date2, time time1, time time2)
 {
-    if (date2.year < date1.year)
+    int year1 = date1.year, month1 = date1.month, day1 = date1.day;
+    int year2 = date2.year, month2 = date2.month, day2 = date2.day;
+    int hours1 = time1.hours, minutes1 = time1.minutes;
+    int hours2 = time2.hours, minutes2 = time2.minutes;
+
+    /* If the date 2 year is lower then date 1 year */
+    if (year2 > year1)
+        return 0;
+    if (year2 < year1)
         return DATE2_IS_CLOSER;
-    else if (date2.month < date1.month)
+    else if (month2 < month1)
         return DATE2_IS_CLOSER;
-    else if (date2.day < date1.day)
+    else if (day2 < day1)
         return DATE2_IS_CLOSER;
-    else if (date2.day == date1.day)
+    else if (day2 == day1)
     {
-        if (time2.hours < time1.hours)
+        if (hours2 < hours1)
             return DATE2_IS_CLOSER;
-        else if (time2.hours == time1.hours)
+        else if (hours2 == hours1)
         {
-            if (time2.minutes < time1.minutes)
+            if (minutes2 < minutes1)
                 return DATE2_IS_CLOSER;
             else
                 return 0;
         }
     }
     else
-    {
         return 0;
-    }
     return 0;
 }
 
