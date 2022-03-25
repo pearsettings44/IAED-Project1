@@ -42,6 +42,10 @@ int check_same_day_flights(flight flights[], char code[], date date_departure)
     int counter;
     for (counter = 0; counter < FLIGHT_MAX; counter++)
     {
+        if (!strcmp(flights[counter].code, UNDEFINED_FLIGHT))
+        {
+            break;
+        }
         if (!(strcmp(flights[counter].code, code)))
         {
             if (flights[counter].date_departure.day == date_departure.day &&
@@ -144,8 +148,16 @@ void sort_flights(flight flights[], int len)
     flight temp_flight;
     for (counterAux = 0; counterAux < len - 1; counterAux++)
     {
+        if (!strcmp(flights[counterAux].code, UNDEFINED_FLIGHT))
+        {
+            break;
+        }
         for (counter = 0; counter < len - 1; counter++)
         {
+            if (!strcmp(flights[counterAux].code, UNDEFINED_FLIGHT))
+            {
+                break;
+            }
             /* Sort airports by date and time */
 
             if (find_older_date(flights[counter].date_departure,
