@@ -7,7 +7,8 @@
 #include <string.h>
 
 /**
- * Sets the value of all flights code to UNDEFINED_FLIGHT.
+ * Sets the value of all flights code to UNDEFINED_FLIGHT. This makes it
+ * easier to avoid unnecessary long iterations.
  */
 void setup_flights(flight flights[])
 {
@@ -19,13 +20,15 @@ void setup_flights(flight flights[])
 }
 
 /**
- * CHecks if the code is valid.
+ * Check if the code is valid.
  */
 int check_flight_code(char code[])
 {
     int counter, code_length = strlen(code) - 1;
+    /* Check if first two elements of code are uppercase letters */
     if (!isupper(code[0]) || !isupper(code[1]))
         return INVALID_FLIGHT_CODE_ID;
+    /* Check if the rest of the code are numbers */
     for (counter = 2; counter <= code_length; counter++)
     {
         if (!isdigit(code[counter]))
@@ -43,16 +46,13 @@ int check_same_day_flights(flight flights[], char code[], date date_departure)
     for (counter = 0; counter < FLIGHT_MAX; counter++)
     {
         if (!strcmp(flights[counter].code, UNDEFINED_FLIGHT))
-        {
             break;
-        }
+        /* Check if a flight with the same code is in the same day */
         if (!(strcmp(flights[counter].code, code)))
-        {
             if (flights[counter].date_departure.day == date_departure.day &&
                 flights[counter].date_departure.month == date_departure.month &&
                 flights[counter].date_departure.year == date_departure.year)
                 return FLIGHT_ALREADY_EXISTS_ID;
-        }
     }
     return 0;
 }
@@ -62,7 +62,8 @@ int check_same_day_flights(flight flights[], char code[], date date_departure)
  */
 int check_duration(time duration)
 {
-    if (duration.hours > 12 || (duration.hours == 12 && duration.minutes != 0))
+    if (duration.hours > MAX_DURATION ||
+        (duration.hours == MAX_DURATION && duration.minutes != 0))
         return INVALID_DURATION_ID;
     return 0;
 }
@@ -76,6 +77,7 @@ int check_capacity(int capacity)
         return INVALID_CAPACITY_ID;
     return 0;
 }
+
 /**
  * Adds a flight to the system.
  * Returns the ID that represents a new flight.
@@ -136,6 +138,7 @@ int add_flights(airport airports[], flight flights[], char code[],
             return 0;
         }
     }
+    /* If the function got here, it means there are no slots for new flights */
     return TOO_MANY_FLIGHTS_ID;
 }
 
@@ -149,15 +152,11 @@ void sort_flights(flight flights[], int len)
     for (counterAux = 0; counterAux < len - 1; counterAux++)
     {
         if (!strcmp(flights[counterAux].code, UNDEFINED_FLIGHT))
-        {
             break;
-        }
         for (counter = 0; counter < len - 1; counter++)
         {
             if (!strcmp(flights[counterAux].code, UNDEFINED_FLIGHT))
-            {
                 break;
-            }
             /* Sort airports by date and time */
 
             if (find_older_date(flights[counter].date_departure,
@@ -181,6 +180,7 @@ void list_flights_sorted_departure(flight flights[], char airport_id[])
 {
     flight flights_aux[FLIGHT_MAX];
     int counter, counterAux = 0;
+    /* Make a temp flight system */
     for (counter = 0; counter < FLIGHT_MAX; counter++)
     {
 
@@ -188,22 +188,28 @@ void list_flights_sorted_departure(flight flights[], char airport_id[])
             break;
         if (!strcmp(flights[counter].airport_departure, airport_id))
         {
-            strcpy(flights_aux[counterAux].code,
-                   flights[counter].code);
+            /* Set attributes */
+            strcpy(flights_aux[counterAux].code, flights[counter].code);
             strcpy(flights_aux[counterAux].airport_arrival,
                    flights[counter].airport_arrival);
             strcpy(flights_aux[counterAux].airport_departure,
                    flights[counter].airport_departure);
 
-            flights_aux[counterAux].date_departure.day = flights[counter].date_departure.day;
-            flights_aux[counterAux].date_departure.month = flights[counter].date_departure.month;
-            flights_aux[counterAux].date_departure.year = flights[counter].date_departure.year;
+            flights_aux[counterAux].date_departure.day =
+                flights[counter].date_departure.day;
+            flights_aux[counterAux].date_departure.month =
+                flights[counter].date_departure.month;
+            flights_aux[counterAux].date_departure.year =
+                flights[counter].date_departure.year;
 
-            flights_aux[counterAux].time_departure.hours = flights[counter].time_departure.hours;
-            flights_aux[counterAux].time_departure.minutes = flights[counter].time_departure.minutes;
+            flights_aux[counterAux].time_departure.hours =
+                flights[counter].time_departure.hours;
+            flights_aux[counterAux].time_departure.minutes =
+                flights[counter].time_departure.minutes;
             counterAux++;
         }
     }
+    /* Sort the flights */
     sort_flights(flights_aux, counterAux);
 
     for (counter = 0; counter < counterAux; counter++)
@@ -219,16 +225,16 @@ void list_flights_sorted_departure(flight flights[], char airport_id[])
 }
 
 /**
- * Lists all flights in the system from the specified arrivaç airport
+ * Lists all flights in the system from the specified arrival airport
  */
 void list_flights_sorted_arrival(flight flights[], char airport_id[])
 {
+    int counter, counterAux, hours_before, hours_after;
     flight flights_aux[FLIGHT_MAX];
-    int counter, counterAux;
-    int hours_before, hours_after;
     time arrival_time;
     date arrival_date;
     counterAux = 0;
+    /* Make a temp flight system */
     for (counter = 0; counter < FLIGHT_MAX; counter++)
     {
 
@@ -236,8 +242,8 @@ void list_flights_sorted_arrival(flight flights[], char airport_id[])
             break;
         if (!strcmp(flights[counter].airport_arrival, airport_id))
         {
-            strcpy(flights_aux[counterAux].code,
-                   flights[counter].code);
+            /* Set attributes */
+            strcpy(flights_aux[counterAux].code, flights[counter].code);
             strcpy(flights_aux[counterAux].airport_arrival,
                    flights[counter].airport_arrival);
             strcpy(flights_aux[counterAux].airport_departure,
@@ -251,14 +257,18 @@ void list_flights_sorted_arrival(flight flights[], char airport_id[])
             {
                 arrival_date = forward_date(flights[counter].date_departure);
                 flights_aux[counterAux].date_departure.day = arrival_date.day;
-                flights_aux[counterAux].date_departure.month = arrival_date.month;
+                flights_aux[counterAux].date_departure.month =
+                    arrival_date.month;
                 flights_aux[counterAux].date_departure.year = arrival_date.year;
             }
             else
             {
-                flights_aux[counterAux].date_departure.day = flights[counter].date_departure.day;
-                flights_aux[counterAux].date_departure.month = flights[counter].date_departure.month;
-                flights_aux[counterAux].date_departure.year = flights[counter].date_departure.year;
+                flights_aux[counterAux].date_departure.day =
+                    flights[counter].date_departure.day;
+                flights_aux[counterAux].date_departure.month =
+                    flights[counter].date_departure.month;
+                flights_aux[counterAux].date_departure.year =
+                    flights[counter].date_departure.year;
             }
 
             flights_aux[counterAux].time_departure.hours = arrival_time.hours;
@@ -266,6 +276,7 @@ void list_flights_sorted_arrival(flight flights[], char airport_id[])
             counterAux++;
         }
     }
+    /* Sort the flights */
     sort_flights(flights_aux, counterAux);
 
     for (counter = 0; counter < counterAux; counter++)

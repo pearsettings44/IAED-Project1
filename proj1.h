@@ -25,6 +25,7 @@
 #define UNDEFINED_FLIGHT "zzzzzz"
 #define DATE_LENGTH 11
 #define TIME_LENGTH 6
+#define MAX_DURATION 12
 
 #define INVALID_FLIGHT_CODE_ID -1
 #define TOO_MANY_FLIGHTS_ID -2

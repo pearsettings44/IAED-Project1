@@ -112,31 +112,28 @@ time forward_time(time time_departure, time duration)
     int time_hours, time_minutes, duration_hours, duration_minutes;
     int time_arrival_hours = 0, time_arrival_minutes = 0;
     time time_arrival;
-    time_hours = time_departure.hours;
-    time_minutes = time_departure.minutes;
-    duration_hours = duration.hours;
-    duration_minutes = duration.minutes;
+    time_hours = time_departure.hours, time_minutes = time_departure.minutes;
+    duration_hours = duration.hours, duration_minutes = duration.minutes;
 
+    /* Check if adding minutes will result in an hour passing by */
     if (time_minutes + duration_minutes > 59)
     {
         time_arrival_minutes = (time_minutes + duration_minutes) % 60;
         time_arrival_hours += 1;
     }
     else
-    {
         time_arrival_minutes = time_minutes + duration_minutes;
-    }
 
+    /* Check if adding hours will result in a day passing by */
     if (time_hours + duration_hours > 23)
     {
         time_arrival_hours -= 24;
         time_arrival_hours += duration_hours + time_hours;
     }
     else
-    {
         time_arrival_hours += time_hours + duration_hours;
-    }
 
+    /* Define time arrival attributes. */
     time_arrival.hours = time_arrival_hours;
     time_arrival.minutes = time_arrival_minutes;
     return time_arrival;
@@ -155,42 +152,32 @@ date forward_date(date date_departure)
     /* If the next day is a new year */
     if (day == 31 && month == DEC)
     {
-        arrival.year = year + 1;
-        arrival.month = 1;
-        arrival.day = 1;
+        arrival.year = year + 1, arrival.month = 1, arrival.day = 1;
         return arrival;
-        /* If the next day is a new month of a 31 days month. */
     }
+    /* If the next day is a new month of a 31 days month. */
     else if (day == 31 && (month == JAN || month == MAR || month == MAY ||
                            month == JUL || month == AUG || month == OUT))
     {
-        arrival.day = 1;
-        arrival.month = month + 1;
-        arrival.year = year;
+        arrival.day = 1, arrival.month = month + 1, arrival.year = year;
         return arrival;
     }
     /* If the next day is a new month of a 30 days month. */
     else if (day == 30 && (month == APR || month == JUN || month == SEP ||
                            month == NOV))
     {
-        arrival.day = 1;
-        arrival.month = month + 1;
-        arrival.year = year;
+        arrival.day = 1, arrival.month = month + 1, arrival.year = year;
         return arrival;
     }
-    /* If the next day is a new month of a 28 days month. */
-    else if (day == 28 && month == 2)
+    /* If the next day is a new month of a 28 days month (february). */
+    else if (day == 28 && month == FEB)
     {
-        arrival.day = 1;
-        arrival.month = month + 1;
-        arrival.year = year;
+        arrival.day = 1, arrival.month = month + 1, arrival.year = year;
         return arrival;
     }
     else
     {
-        arrival.day = day + 1;
-        arrival.month = month;
-        arrival.year = year;
+        arrival.day = day + 1, arrival.month = month, arrival.year = year;
         return arrival;
     }
 }
