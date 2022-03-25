@@ -84,6 +84,7 @@ void handle_add_airport_command(airport airports[])
         }
         strcat(city, cityaux);
     }
+    /* remove extra white-space. */
     for (i = strlen(city) - 1; i >= 0; i--)
     {
         if (city[i] == ' ')
@@ -124,15 +125,16 @@ void handle_list_airports_command(airport airports[])
         scanf("%s", id);
         while (strcmp(airports[counter].id, id) && counter < AIRPORT_MAX - 1)
             counter++;
-        /* Check if the ID exists */
-        if (counter == AIRPORT_MAX - 1)
-            printf(ERROR_NO_SUCH_AIRPORT_ID, id);
-        else
-        {
-            printf("%s %s %s %d\n", airports[counter].id,
-                   airports[counter].city, airports[counter].country,
-                   airports[counter].flights_quantity);
-            empty++;
+        { /* Check if the ID already exists */
+            if (counter == AIRPORT_MAX - 1)
+                printf(ERROR_NO_SUCH_AIRPORT_ID, id);
+            else
+            {
+                printf("%s %s %s %d\n", airports[counter].id,
+                       airports[counter].city, airports[counter].country,
+                       airports[counter].flights_quantity);
+                empty++;
+            }
         }
     }
     /* If it's just the 'l' command without arguments */
