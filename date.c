@@ -28,6 +28,9 @@ int check_dates(date departure_date, date system_date)
     {
         return INVALID_DATE_ID;
     }
+    if (departure_date.year == MAX_DATE_YEAR && (departure_date.month != 1 ||
+                                                 departure_date.day != 1))
+        return INVALID_DATE_ID;
     /* Check is year difference is greater then 1 year */
     if (system_date.year - departure_date.year > 1)
     {
@@ -106,27 +109,73 @@ time forward_time(time time_departure, time duration)
     duration_hours = duration.hours;
     duration_minutes = duration.minutes;
 
-    if(time_minutes + duration_minutes > 59)
+    if (time_minutes + duration_minutes > 59)
     {
-        time_arrival_minutes = (time_minutes + duration_minutes) %  60;
-        time_arrival_hours +=1;
+        time_arrival_minutes = (time_minutes + duration_minutes) % 60;
+        time_arrival_hours += 1;
     }
     else
     {
         time_arrival_minutes = time_minutes + duration_minutes;
     }
 
-    if(time_hours + duration_hours > 23)
+    if (time_hours + duration_hours > 23)
     {
         time_arrival_hours -= 24;
-        time_arrival_hours += duration_hours;
+        time_arrival_hours += duration_hours + time_hours;
     }
     else
     {
-        time_arrival_hours = time_hours + duration_hours;
+        time_arrival_hours += time_hours + duration_hours;
     }
-    
+
     time_arrival.hours = time_arrival_hours;
     time_arrival.minutes = time_arrival_minutes;
     return time_arrival;
+}
+
+date forward_date(date date_departure)
+{
+    int year, month, day;
+    date arrival;
+    year = date_departure.year, month = date_departure.month;
+    day = date_departure.day;
+
+    if (day == 31 && month == 12)
+    {
+        arrival.year = year + 1;
+        arrival.month = 1;
+        arrival.day = 1;
+        return arrival;
     }
+    else if (day == 31 && (month == 1 || month == 3 || month == 5 ||
+                           month == 7 || month == 8 || month == 10))
+    {
+        arrival.day = 1;
+        arrival.month = month + 1;
+        arrival.year = year;
+        return arrival;
+    }
+    else if (day == 31 && (month == 4 || month == 6 || month == 9 ||
+                           month == 11))
+    {
+        arrival.day = 1;
+        arrival.month = month + 1;
+        arrival.year = year;
+        return arrival;
+    }
+    else if (day == 28 && month == 2)
+    {
+        arrival.day = 1;
+        arrival.month = month + 1;
+        arrival.year = year;
+        return arrival;
+    }
+    else
+    {
+        arrival.day = day + 1;
+        arrival.month = month;
+        arrival.year = year;
+        return arrival;
+    } 
+}

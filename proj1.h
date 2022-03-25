@@ -44,10 +44,10 @@
 
 #define STARTING_DATE_DAY 1
 #define STARTING_DATE_MONTH 1
-#define STARTING_DATE_YEAR 2021
+#define STARTING_DATE_YEAR 2022
 
 #define MAX_DATE_YEAR 2023
-#define MIN_DATE_YEAR 2021
+#define MIN_DATE_YEAR 2022
 
 #define MIN_CAPACITY 10
 #define MAX_CAPACITY 100
@@ -109,6 +109,7 @@ date setup_default_date(date system_date);
 int check_dates(date departure_date, date system_date);
 int find_older_date(date date1, date date2, time time1, time time2);
 time forward_time(time time_departure, time duration);
+date forward_date(date date_departure);
 
 /* flights.c */
 void setup_flights(flight flights[]);
