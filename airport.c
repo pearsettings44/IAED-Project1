@@ -7,7 +7,9 @@
 #include <string.h>
 
 /**
- * Sets the value of all aiports id to UNDEFINED_AIRPORT, and flights to 0;
+ * Sets the value of all aiports id to UNDEFINED_AIRPORT, and flights to 0,
+ * this makes it easier to avoid unnecessary long iterations and finding which
+ * indexs are actually definied airports.
  */
 void setup_airports(airport airports[])
 {
@@ -19,8 +21,27 @@ void setup_airports(airport airports[])
 }
 
 /**
+ * Check if an airport id is a valid one.
+ */
+int verify_airport_id(char id[])
+{
+    int counter;
+    for (counter = 0; counter < ID_LENGTH - 1; counter++)
+    {
+        /* Check if ID has anything else then uppercase chars. */
+        if (islower(id[counter]) || !isalpha(id[counter]))
+            return INVALID_AIPORT_ID;
+
+        /* Check if ID has length 3 */
+        if (strlen(id) != ID_LENGTH - 1)
+            return INVALID_AIPORT_ID;
+    }
+    return 0;
+}
+
+/**
  * Adds an airport to the system.
- * Returns the ID that represents a new airpor.
+ * Returns the ID that represents a new airport.
  * If the aiport id is invalid, returns INVALID_AIRPORT_ID.
  * If the airport already exists, returns DUPLICATE_AIRPORT_ID.
  * If the system has no more slots for new airports,
@@ -29,19 +50,14 @@ void setup_airports(airport airports[])
 int add_airport(airport airports[], char id[], char country[], char city[])
 {
     int counter;
-    for (counter = 0; counter < ID_LENGTH - 1; counter++)
+    
+    /* Check if the airports's id is valid */
+    switch (verify_airport_id(id))
     {
-        /* Check if ID has anything else then uppercase chars. */
-        if (islower(id[counter]) || !isalpha(id[counter]))
-        {
-            return INVALID_AIPORT_ID;
-        }
-
-        /* Check if ID has length 3 */
-        if (strlen(id) != 3)
-        {
-            return INVALID_AIPORT_ID;
-        }
+    case INVALID_AIPORT_ID:
+        return INVALID_AIPORT_ID;    
+    default:
+        break;
     }
 
     for (counter = 0; counter < AIRPORT_MAX; counter++)

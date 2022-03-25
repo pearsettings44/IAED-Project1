@@ -263,7 +263,6 @@ void handle_list_flight_departure_command(airport airports[], flight flights[])
     case NO_SUCH_AIRPORT_DEPARTURE_ID:
         printf(ERROR_NO_SUCH_AIRPORT_ID, airport_id);
         break;
-
     default:
         list_flights_sorted_departure(flights, airport_id);
         break;
@@ -283,12 +282,14 @@ void handle_list_flight_arrival_command(airport airports[], flight flights[])
     char airport_id[ID_LENGTH];
     scanf("%s", airport_id);
 
-    if (check_airport_departure_exist(airports, airport_id) ==
-        NO_SUCH_AIRPORT_DEPARTURE_ID)
-        printf(ERROR_NO_SUCH_AIRPORT_ID, airport_id);
-    else
+    switch (check_airport_arrival_exist(airports, airport_id))
     {
+    case NO_SUCH_AIRPORT_ARRIVAL_ID:
+        printf(ERROR_NO_SUCH_AIRPORT_ID, airport_id);
+        break;
+    default:
         list_flights_sorted_arrival(flights, airport_id);
+        break;
     }
 }
 
@@ -302,18 +303,28 @@ void handle_forward_date_command()
 {
     int day, month, year;
     date new_date;
+
+    /* Get new date attributes */
     scanf("%d-%d-%d", &day, &month, &year);
+    /* Define new date attributes */
     new_date.day = day;
     new_date.month = month;
     new_date.year = year;
-    if (check_dates(new_date, system_date) == INVALID_DATE_ID)
-        printf(ERROR_INVALID_DATE);
-    else
+
+    /* Check if new date is a valid date */
+    switch (check_dates(new_date, system_date))
     {
+    case INVALID_DATE_ID:
+        printf(ERROR_INVALID_DATE);
+        break;
+
+    default:
+        /* Change system date to the new date */
         system_date.day = new_date.day;
         system_date.month = new_date.month;
         system_date.year = new_date.year;
         printf("%02d-%02d-%04d\n", system_date.day, system_date.month,
                system_date.year);
+        break;
     }
 }
