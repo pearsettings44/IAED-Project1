@@ -34,6 +34,10 @@ int check_flight_code(char code[])
         if (!isdigit(code[counter]))
             return INVALID_FLIGHT_CODE_ID;
     }
+    if (code[2] == '0')
+    {
+        return INVALID_FLIGHT_CODE_ID;
+    }
     return 0;
 }
 
