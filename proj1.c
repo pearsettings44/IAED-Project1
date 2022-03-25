@@ -6,6 +6,7 @@
 #include <ctype.h>
 #include <string.h>
 
+/* global variable: system date */
 date system_date;
 int main()
 {
@@ -127,7 +128,11 @@ void handle_list_airports_command(airport airports[])
             counter++;
         /* Check if the ID already exists */
         if (counter == AIRPORT_MAX - 1)
+        {
             printf(ERROR_NO_SUCH_AIRPORT_ID, id);
+            empty++;
+            continue;;
+        }
         else
         {
             printf("%s %s %s %d\n", airports[counter].id,
