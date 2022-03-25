@@ -6,9 +6,9 @@
 #include <ctype.h>
 #include <string.h>
 
+date system_date;
 int main()
 {
-    date system_date;
     airport airports[AIRPORT_MAX];
     flight flights[FLIGHT_MAX];
     system_date = setup_default_date(system_date);
@@ -48,7 +48,7 @@ int handle_command(airport airports[], flight flights[], date system_date)
         handle_list_flight_arrival_command(airports, flights);
         return 1;
     case 't':
-        /* handle_forward_date_command(); */
+        handle_forward_date_command(system_date);
         return 1;
     case 'q':
         /* stop the program */
@@ -282,4 +282,15 @@ void handle_list_flight_arrival_command(airport airports[], flight flights[])
     {
         list_flights_sorted_arrival(flights, airport_id);
     }
+}
+
+void handle_forward_date_command(date system_date)
+{
+    int day, month, year;
+    scanf("%d-%d-%d", &day, &month, &year);
+    system_date.day = day;
+    system_date.month = month;
+    system_date.year = year;
+    printf("%02d-%02d-%04d\n", system_date.day, system_date.month,
+           system_date.year);
 }

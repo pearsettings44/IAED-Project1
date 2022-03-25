@@ -54,6 +54,19 @@
 
 #define DATE2_IS_CLOSER -1
 
+#define JAN 1
+#define FEB 2
+#define MAR 3
+#define APR 4
+#define MAY 5
+#define JUN 6
+#define JUL 7
+#define AUG 8
+#define SEP 9
+#define OUT 10
+#define NOV 11
+#define DEC 12
+
 /* structs */
 typedef struct
 {
@@ -95,6 +108,7 @@ void handle_add_flight_command(airport airports[], flight flights[],
                                date system_date);
 void handle_list_flight_departure_command(airport airports[], flight flights[]);
 void handle_list_flight_arrival_command(airport airports[], flight flights[]);
+void handle_forward_date_command(date system_date);
 
 /* airport.c */
 void setup_airports(airport airports[]);

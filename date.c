@@ -141,29 +141,33 @@ date forward_date(date date_departure)
     year = date_departure.year, month = date_departure.month;
     day = date_departure.day;
 
-    if (day == 31 && month == 12)
+    /* If the next day is a new year */
+    if (day == 31 && month == DEC)
     {
         arrival.year = year + 1;
         arrival.month = 1;
         arrival.day = 1;
         return arrival;
+        /* If the next day is a new month of a 31 days month. */
     }
-    else if (day == 31 && (month == 1 || month == 3 || month == 5 ||
-                           month == 7 || month == 8 || month == 10))
+    else if (day == 31 && (month == JAN || month == MAR || month == MAY ||
+                           month == JUL || month == AUG || month == OUT))
     {
         arrival.day = 1;
         arrival.month = month + 1;
         arrival.year = year;
         return arrival;
     }
-    else if (day == 31 && (month == 4 || month == 6 || month == 9 ||
-                           month == 11))
+    /* If the next day is a new month of a 30 days month. */
+    else if (day == 30 && (month == APR || month == JUN || month == SEP ||
+                           month == NOV))
     {
         arrival.day = 1;
         arrival.month = month + 1;
         arrival.year = year;
         return arrival;
     }
+    /* If the next day is a new month of a 28 days month. */
     else if (day == 28 && month == 2)
     {
         arrival.day = 1;
@@ -177,5 +181,5 @@ date forward_date(date date_departure)
         arrival.month = month;
         arrival.year = year;
         return arrival;
-    } 
+    }
 }

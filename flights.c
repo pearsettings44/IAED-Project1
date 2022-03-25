@@ -278,7 +278,7 @@ void list_flights_sorted_arrival(flight flights[], char airport_id[])
 }
 
 /**
- * Lists all flights in the system, by creation date
+ * Lists all flights in the system, by creation date.
  */
 void list_all_flights(flight flights[])
 {
