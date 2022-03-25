@@ -49,7 +49,7 @@ int handle_command(airport airports[], flight flights[], date system_date)
         handle_list_flight_arrival_command(airports, flights);
         return 1;
     case 't':
-        handle_forward_date_command();
+        handle_forward_date_command(/* airports, flights */);
         return 1;
     case 'q':
         /* stop the program */
@@ -295,7 +295,7 @@ void handle_list_flight_arrival_command(airport airports[], flight flights[])
  * input format: t <date>
  * output format: <date>
  */
-void handle_forward_date_command()
+void handle_forward_date_command(/* airport airports[], flight flights[] */)
 {
     int day, month, year;
     date new_date;
@@ -310,7 +310,37 @@ void handle_forward_date_command()
         system_date.day = new_date.day;
         system_date.month = new_date.month;
         system_date.year = new_date.year;
-        printf("%02d-%02d-%04d\n", system_date.day, system_date.month,
+/*         clear_older_flights(airports, flights);
+ */        printf("%02d-%02d-%04d\n", system_date.day, system_date.month,
                system_date.year);
+    }
+}
+
+void clear_older_flights(airport airports[], flight flights[])
+{
+    int counter;
+    int i;
+    int j;
+    for (counter = 0; counter < FLIGHT_MAX; counter++)
+    {
+        if (!strcmp(flights[counter].code, UNDEFINED_FLIGHT))
+            break;
+
+        if (check_dates(flights[counter].date_departure, system_date) ==
+            INVALID_DATE_ID)
+        {
+            for (j = 0; j < AIRPORT_MAX; j++)
+            {
+                if (!strcmp(airports[j].id, flights[counter].airport_departure))
+                    airports[j].flights_quantity -= 1;
+            }
+            /* use for loop to delete the element and update the index*/
+            for (i = counter; i < FLIGHT_MAX - 1; i++)
+            {
+                if (!strcmp(flights[counter].code, UNDEFINED_FLIGHT))
+                    break;
+                flights[i] = flights[i + 1];
+            }
+        }
     }
 }

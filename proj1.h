@@ -108,7 +108,8 @@ void handle_add_flight_command(airport airports[], flight flights[],
                                date system_date);
 void handle_list_flight_departure_command(airport airports[], flight flights[]);
 void handle_list_flight_arrival_command(airport airports[], flight flights[]);
-void handle_forward_date_command();
+void handle_forward_date_command(/* airport airports[], flight flights[] */);
+void clear_older_flights(airport airports[], flight flights[]);
 
 /* airport.c */
 void setup_airports(airport airports[]);
