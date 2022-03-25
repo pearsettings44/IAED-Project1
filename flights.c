@@ -175,7 +175,7 @@ void sort_flights(flight flights[], int len)
 }
 
 /**
- * Lists all flights in the system
+ * Lists all flights in the system from the specified departure airport
  */
 void list_flights_sorted_departure(flight flights[], char airport_id[])
 {
@@ -218,6 +218,9 @@ void list_flights_sorted_departure(flight flights[], char airport_id[])
     }
 }
 
+/**
+ * Lists all flights in the system from the specified arrivaç airport
+ */
 void list_flights_sorted_arrival(flight flights[], char airport_id[])
 {
     flight flights_aux[FLIGHT_MAX];

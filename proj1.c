@@ -75,7 +75,7 @@ void handle_add_airport_command(airport airports[])
     char id[ID_LENGTH], country[COUNTRY_LENGTH], city[CITY_LENGTH];
     scanf("%s %s", id, country);
     c =getchar();
-    while ((c = getchar()) != '\n' && i < 50)
+    while ((c = getchar()) != '\n' && i < CITY_LENGTH - 1)
     {
         city[i] = c;
         i++;

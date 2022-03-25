@@ -81,6 +81,9 @@ int find_older_date(date date1, date date2, time time1, time time2)
     return 0;
 }
 
+/**
+ * Add duration to time, get arrival time.
+ */
 time forward_time(time time_departure, time duration)
 {
     time time_arrival;
@@ -116,6 +119,9 @@ time forward_time(time time_departure, time duration)
     return time_arrival;
 }
 
+/**
+ * Get the next day date.
+ */
 date forward_date(date date_departure)
 {
     int year, month, day;
