@@ -64,29 +64,43 @@ int find_older_date(date date1, date date2, time time1, time time2)
     int hours1 = time1.hours, minutes1 = time1.minutes;
     int hours2 = time2.hours, minutes2 = time2.minutes;
 
-    /* If the date 2 year is lower then date 1 year */
+    /* If the date 2 year is bigger than date 1 year */
     if (year2 > year1)
         return 0;
+    /* If the date 2 year is lower than date 1 year */
     if (year2 < year1)
         return DATE2_IS_CLOSER;
-    else if (month2 < month1)
-        return DATE2_IS_CLOSER;
-    else if (day2 < day1)
-        return DATE2_IS_CLOSER;
-    else if (day2 == day1)
+    /* If the date 2 year is equal to date 1 year */
+    if (year2 == year1)
     {
-        if (hours2 < hours1)
+        if (month2 < month1)
             return DATE2_IS_CLOSER;
-        else if (hours2 == hours1)
+        else if (month2 == month1)
         {
-            if (minutes2 < minutes1)
+            if (day2 < day1)
+            {
                 return DATE2_IS_CLOSER;
+            }
+            else if (day2 == day1)
+            {
+                if (hours2 < hours1)
+                    return DATE2_IS_CLOSER;
+                else if (hours2 == hours1)
+                {
+                    if (minutes2 < minutes1)
+                        return DATE2_IS_CLOSER;
+                    else
+                        return 0;
+                }
+                else
+                    return 0;
+            }
             else
                 return 0;
         }
+        else
+            return 0;
     }
-    else
-        return 0;
     return 0;
 }
 
@@ -95,9 +109,9 @@ int find_older_date(date date1, date date2, time time1, time time2)
  */
 time forward_time(time time_departure, time duration)
 {
-    time time_arrival;
     int time_hours, time_minutes, duration_hours, duration_minutes;
     int time_arrival_hours = 0, time_arrival_minutes = 0;
+    time time_arrival;
     time_hours = time_departure.hours;
     time_minutes = time_departure.minutes;
     duration_hours = duration.hours;
