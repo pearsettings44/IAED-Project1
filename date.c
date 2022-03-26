@@ -134,6 +134,8 @@ time forward_time(time time_departure, time duration)
         time_arrival_hours += time_hours + duration_hours;
 
     /* Define time arrival attributes. */
+    if (time_arrival_hours == 24)
+        time_arrival_hours = 0;
     time_arrival.hours = time_arrival_hours;
     time_arrival.minutes = time_arrival_minutes;
     return time_arrival;
